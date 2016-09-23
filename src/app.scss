@@ -1,0 +1,51 @@
+body{
+  margin: 0;
+  font-family: 'Gloria Hallelujah', cursive;
+  overflow: hidden;
+}
+.page{
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+.gui{
+
+
+  &.center{
+    text-align: center;
+  }
+
+  &.basic{
+    background-image: url("./assets/images/gui/basic.png");
+    font-size: 24px;
+    color: #27054c;
+    transition: 0.2s all ease-out;
+
+    &.hover:hover{
+      background-image: url("./assets/images/gui/basic_hover.png");
+      cursor: pointer;
+      color: #ffffff;
+    }
+  }
+
+  &.one{
+    background-position: -17px 519px;
+    width: 279px;
+    height: 166px;
+    padding: 52px 65px 8px 59px;
+  }
+  &.two{
+    background-position: -511px 746px;
+    width: 334px;
+    height: 53px;
+    padding: 42px 33px 44px 51px;
+  }
+  &.three{
+    background-position: -523px 891px;
+    width: 334px;
+    height: 53px;
+    padding: 42px 33px 44px 51px;
+  }
+
+}
