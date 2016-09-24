@@ -29,6 +29,20 @@ body{
     }
   }
 
+  &.orange{
+    background-image: url("./assets/images/gui/orange.png");
+    font-size: 24px;
+    color: #1e008e;
+    font-weight: bold;
+    transition: 0.2s all ease-out;
+
+    &.hover:hover{
+      background-image: url("./assets/images/gui/orange_hover.png");
+      cursor: pointer;
+      color: #0d374c;
+    }
+  }
+
   &.one{
     background-position: -17px 519px;
     width: 279px;

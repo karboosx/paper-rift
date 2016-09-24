@@ -9,17 +9,20 @@
     import Vue from 'vue'
     import $ from 'jquery'
     import Battle from '../components/battle/battle.vue'
+    import Unit from '../components/battle/unit'
 
     export default {
         data: function () {
             return {
                 own:[
-                    {x:1,y:1,type:'axemen',left:0,top:0,rotation:0, moving:false, hp:10,maxHp:10,attack:10,defence:10,speed:10,ap:0,maxAp:1},
-                    {x:2,y:1,type:'cavalry',left:0,top:0,rotation:0, moving:false, hp:3,maxHp:10,attack:6,defence:5,speed:8,ap:1,maxAp:1},
-                    {x:2,y:2,type:'swordman',left:0,top:0,rotation:0, moving:false, hp:2,maxHp:10,attack:15,defence:10,speed:1,ap:1,maxAp:1},
-                    {x:1,y:2,type:'king',left:0,top:0,rotation:0, moving:false, hp:10,maxHp:10,attack:10,defence:10,speed:2,ap:1,maxAp:1},
+                    new Unit().setPos(0,0).setType('axemen').setParty('player'),
+                    new Unit().setPos(1,0).setType('cavalry').setParty('player'),
+                    new Unit().setPos(1,1).setType('swordman').setParty('player'),
+                    new Unit().setPos(0,1).setType('king').setParty('player'),
                 ],
-                enemy:[]
+                enemy:[
+                    {x:6,y:2,type:'king',left:0,top:0,rotation:0, moving:false, hp:10,maxHp:10,attack:10,defence:10,speed:2,ap:1,maxAp:1},
+                ]
             }
         },
         components: {

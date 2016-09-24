@@ -1,11 +1,17 @@
 <template>
     <div>
+        <div class="ornament top"></div>
+        <div class="ornament bottom"></div>
+        <div class="next_turn">
+            <div class="gui orange two hover" @click="nextOwnTurn">Next turn </div>
+        </div>
+
         <div class="container">
             <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map">
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{selected:(hex.x == selectedX && hex.y == selectedY), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
-                        <hex v-if="hex.unit != undefined" :unit.sync="hex.unit" :selected="hex.x == selectedX && hex.y == selectedY"></hex>
+                        <hex v-if="hex.unit != undefined" :can="hex.can" :unit.sync="hex.unit" :selected="hex.x == selectedX && hex.y == selectedY"></hex>
                     </div>
                 </div>
 
@@ -16,6 +22,9 @@
                 <div class="unit_image" :class="[selectedUnit.type]"></div>
 
                 <div class="gui basic one info_panel">
+                    <div class="information big">
+                        {{ selectedUnit.name }}
+                    </div>
                     <div class="information">
                         <div class="icon small sword"></div>
                         {{ selectedUnit.attack }}
@@ -26,13 +35,13 @@
                     </div>
                     <div class="information">
                         <div class="icon small boots"></div>
-                        {{ selectedUnit.speed }}
+                        {{ selectedUnit.speed }}%
                     </div>
                     <div class="information">
                         <div class="icon small arrow"></div>
                         {{ selectedUnit.ap }} / {{ selectedUnit.maxAp }}
                     </div>
-                    <div class="information">
+                    <div class="information medium">
                         <div class="icon small heart"></div>
                         {{ selectedUnit.hp }} / {{ selectedUnit.maxHp }}
                     </div>
@@ -64,10 +73,29 @@
             Hex
         },
         methods:{
+            nextOwnTurn: function () {
+                for (var i = 0; i < this.own.length; i++) {
+                    var unit = this.own[i];
+                    unit.ap = unit.maxAp;
+                }
+            },
+            nextEnemyTurn: function () {
+                for (var i = 0; i < this.own.length; i++) {
+                    var unit = this.own[i];
+                    unit.ap = unit.maxAp;
+                }
+            },
+            makeUnitAttack: function () {
+
+            },
             selectHex: function (unitX, unitY, unit) {
 
                 if (this.selectedUnit != undefined && !this.selectedUnit.moving && unit == undefined && this.selectedUnit.ap > 0){
-                    this.makeUnitMove(this.selectedUnit, unitX, unitY);
+                    if (unit != undefined && unit.party != this.selectedUnit.party){
+                        this.makeUnitAttack(this.selectedUnit, unit);
+                    }else{
+                        this.makeUnitMove(this.selectedUnit, unitX, unitY);
+                    }
                     this.selectedX = undefined;
                     this.selectedY = undefined;
                     this.selectedUnit = undefined;
@@ -185,7 +213,8 @@
                             y:y,
                             left:left,
                             top:y*this.sizeY,
-                            unit:undefined
+                            unit:undefined,
+                            can:{}
                         };
 
                         if (this.ownArmy[x] != undefined && this.ownArmy[x][y] != undefined){
@@ -200,6 +229,72 @@
 
                         map.push(unit);
                     }
+                }
+
+                for (var i = 0; i < map.length; i++) {
+                    var unitPack = map[i];
+                    var can = {left:'move', right:'move', leftup:'move', rightup:'move', leftdown:'move', rightdown:'move'};
+
+                    if (unitPack.x==0) {
+                        can.left = false;
+                        if (unitPack.y%2 != 0){
+                            can.leftup = false;
+                            can.leftdown = false;
+                        }
+                    }
+
+                    if (unitPack.y==0) {
+                        can.leftup = false;
+                        can.rightup = false;
+                    }
+
+                    if (unitPack.y==this.y-1) {
+                        can.leftdown = false;
+                        can.rightdown = false;
+                    }
+
+                    if (unitPack.x==this.x-1) {
+                        can.right = false;
+                        if (unitPack.y%2 == 0){
+                            can.rightup = false;
+                            can.rightdown = false;
+                        }
+                    }
+
+                    if (this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y] != undefined) can.left = false;
+                    if (this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y] != undefined) can.right = false;
+
+                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y-1] != undefined) can.leftup = false;
+                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y-1] != undefined) can.leftup = false;
+
+                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y-1] != undefined) can.rightup = false;
+                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y-1] != undefined) can.rightup = false;
+
+                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y+1] != undefined) can.leftdown = false;
+                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y+1] != undefined) can.leftdown = false;
+
+                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y+1] != undefined) can.rightdown = false;
+                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y+1] != undefined) can.rightdown = false;
+                    
+                    
+                    if (this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y] != undefined) can.left = 'enemy';
+                    if (this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y] != undefined) can.right = 'enemy';
+
+                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y-1] != undefined) can.leftup = 'enemy';
+                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y-1] != undefined) can.leftup = 'enemy';
+
+                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y-1] != undefined) can.rightup = 'enemy';
+                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y-1] != undefined) can.rightup = 'enemy';
+
+                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y+1] != undefined) can.leftdown = 'enemy';
+                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y+1] != undefined) can.leftdown = 'enemy';
+
+                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y+1] != undefined) can.rightdown = 'enemy';
+                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y+1] != undefined) can.rightdown = 'enemy';
+
+                    
+
+                    unitPack.can = can;
                 }
                 return map;
             }

@@ -51,6 +51,7 @@
     }
     &.selected{
       background-image: url("../../assets/images/gui/hex_active.png");
+      z-index: 1000000;
     }
 
   }
@@ -77,8 +78,17 @@
     flex-wrap: wrap;
     z-index: 100;
     justify-content: space-around;
+    letter-spacing: -2px;
     .information{
-      width: 50%;
+      width: 33%;
+
+      &.big{
+        width: 100%;
+        text-align: center;
+      }
+      &.medium{
+        width: 60%;
+      }
     }
   }
 
@@ -103,5 +113,33 @@
   }
   &.swordman{
     background-image: url("../../assets/images/units/single/swordman.png");
+  }
+}
+
+.ornament{
+  width: 100vw;
+  height: 48px;
+  pointer-events: none;
+  background: url("../../assets/images/gui/wood.png") repeat-x;
+
+  &.top{
+    position: fixed;
+    top: -13px;
+  }
+  &.bottom{
+    position: fixed;
+    bottom: -23px;
+  }
+}
+
+.next_turn{
+  position: fixed;
+  bottom: -20px;
+  left: -247px;
+  text-align: right;
+  z-index: 10000;
+
+  .gui{
+    width: 327px !important;
   }
 }
