@@ -1,14 +1,18 @@
 .hex_image{
   position: absolute;
   z-index: 1000;
+
+  &.used{
+    opacity: 0.4;
+  }
 }
 .unit{
   background-repeat: no-repeat;
-  width: 96px;
-  height: 88px;
+  width: 100px;
+  height: 100px;
   position: relative;
-  top: 6px;
-  transition: 0.05s all ease-out;
+  top: 0px;
+  transition: 0.15s all ease-out;
 
   &.cavalry{
     background-image: url("../../assets/images/units/cavalry.png");
@@ -24,6 +28,18 @@
     }
   }
 
+  &.swordman{
+    background-image: url("../../assets/images/units/swordmen.png");
+    &.active{
+      background-image: url("../../assets/images/units/swordmen_active.png");
+    }
+  }
 
+  &.king{
+    background-image: url("../../assets/images/units/king.png");
+    &.active{
+      background-image: url("../../assets/images/units/king_active.png");
+    }
+  }
 
 }

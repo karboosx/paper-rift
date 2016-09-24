@@ -3,12 +3,40 @@
         <div class="container">
             <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map">
 
-                <div class="hex" v-for="hex in map" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
+                <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{selected:(hex.x == selectedX && hex.y == selectedY), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
                         <hex v-if="hex.unit != undefined" :unit.sync="hex.unit" :selected="hex.x == selectedX && hex.y == selectedY"></hex>
                     </div>
                 </div>
 
+            </div>
+
+            <div class="info" transition="opacity" v-if="selectedUnit != undefined">
+
+                <div class="unit_image" :class="[selectedUnit.type]"></div>
+
+                <div class="gui basic one info_panel">
+                    <div class="information">
+                        <div class="icon small sword"></div>
+                        {{ selectedUnit.attack }}
+                    </div>
+                    <div class="information">
+                        <div class="icon small shield"></div>
+                        {{ selectedUnit.defence }}
+                    </div>
+                    <div class="information">
+                        <div class="icon small boots"></div>
+                        {{ selectedUnit.speed }}
+                    </div>
+                    <div class="information">
+                        <div class="icon small arrow"></div>
+                        {{ selectedUnit.ap }} / {{ selectedUnit.maxAp }}
+                    </div>
+                    <div class="information">
+                        <div class="icon small heart"></div>
+                        {{ selectedUnit.hp }} / {{ selectedUnit.maxHp }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -38,7 +66,7 @@
         methods:{
             selectHex: function (unitX, unitY, unit) {
 
-                if (this.selectedUnit != undefined && !this.selectedUnit.moving && unit == undefined){
+                if (this.selectedUnit != undefined && !this.selectedUnit.moving && unit == undefined && this.selectedUnit.ap > 0){
                     this.makeUnitMove(this.selectedUnit, unitX, unitY);
                     this.selectedX = undefined;
                     this.selectedY = undefined;
@@ -105,6 +133,7 @@
 
                     if (newAnimationTick>timeout){
                         clearInterval(newAnimation);
+                        unit.ap --;
                         unit.x = x;
                         unit.y = y;
                         unit.rotation = 0;
