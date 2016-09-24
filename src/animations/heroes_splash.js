@@ -6,6 +6,6 @@ export default function (element){
 
     element.animate({
         bottom:0,
-    }, 1000, 'easeOutQuad')
+    }, 1000, 'easeOutSine')
 
 }

@@ -1,0 +1,29 @@
+.hex_image{
+  position: absolute;
+  z-index: 1000;
+}
+.unit{
+  background-repeat: no-repeat;
+  width: 96px;
+  height: 88px;
+  position: relative;
+  top: 6px;
+  transition: 0.05s all ease-out;
+
+  &.cavalry{
+    background-image: url("../../assets/images/units/cavalry.png");
+    &.active{
+      background-image: url("../../assets/images/units/cavalry_active.png");
+    }
+  }
+
+  &.axemen{
+    background-image: url("../../assets/images/units/axemen.png");
+    &.active{
+      background-image: url("../../assets/images/units/axemen_active.png");
+    }
+  }
+
+
+
+}

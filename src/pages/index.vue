@@ -2,7 +2,8 @@
     <div class="page">
         <div class="menu" id="menu">
             <div class="gui basic two hover center">Start New Game</div>
-            <div class="gui basic three hover center">Options</div>
+            <div v-link="{name:'random_battle'}" class="gui basic three hover center">Random Battle</div>
+            <div class="gui basic two hover center">Options</div>
         </div>
         <div class="heroes" id="heroes"></div>
         <div class="logo" id="logo"></div>
@@ -35,4 +36,4 @@
     }
 </script>
 
-<style src="./index.scss"></style>
+<style lang="scss" src="./index.scss"></style>

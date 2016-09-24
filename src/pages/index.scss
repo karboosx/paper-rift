@@ -1,5 +1,6 @@
 .page{
-  background: #00b3ee;
+  background-color: #00b3ee;
+  background-image: url("../assets/images/backgrounds/splash.png");
   background-size: cover;
   background-position: center center;
 }
@@ -9,7 +10,7 @@
   background-size: contain;
   background-position: right center;
   width: 100vw;
-  height: 50%;
+  height: 70%;
   position: absolute;
   left:0;
   bottom: -206px;

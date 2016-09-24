@@ -1,0 +1,59 @@
+.page{
+  background: #a4ffad;
+}
+
+#info{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hex{
+  position: absolute;
+  width: 96px;
+  height: 109px;
+
+  .hex_inner{
+    position: absolute;
+    width: 96px;
+    height: 109px;
+    z-index: 100;
+    transition: 0.1s all ease-out;
+    cursor: pointer;
+    background-image: url("../../assets/images/gui/hex.png");
+
+    &.own{
+      background-image: url("../../assets/images/gui/hex_own.png");
+    }
+    &.moving{
+      z-index: 1000;
+    }
+
+    &.enemy{
+      background-image: url("../../assets/images/gui/hex_enemy.png");
+    }
+
+    &.active{
+      background-image: url("../../assets/images/gui/hex_active.png");
+    }
+    &.selected{
+      background-image: url("../../assets/images/gui/hex_active.png");
+    }
+
+    &:hover{
+      background-image: url("../../assets/images/gui/hex_hover.png");
+    }
+  }
+
+}
+
+.map{
+  position: absolute;
+  top:30px;
+  left:30px;
+}

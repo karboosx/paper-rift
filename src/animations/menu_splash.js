@@ -5,7 +5,7 @@ export default function (element){
     })
 
     element.animate({
-        bottom:100,
-    }, 1800, 'easeOutBounce')
+        bottom:20,
+    }, 1700, 'easeOutBounce')
 
 }
