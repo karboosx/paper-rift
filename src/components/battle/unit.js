@@ -8,8 +8,8 @@ var units = {
         name: 'King'
     },
     cavalry: {
-        hp: 1,
-        attack: 20,
+        hp: 30,
+        attack: 2,
         defence: 0,
         speed: 30,
         ap: 2,

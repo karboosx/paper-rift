@@ -3,22 +3,21 @@
         <div class="ornament top"></div>
         <div class="ornament bottom"></div>
         <div class="next_turn">
-            <div class="gui next_turn" @click="nextTurn">TURN</div>
+            <div class="gui next_turn" @click="nextTurn" v-show="playerTurn">TURN</div>
         </div>
 
         <div class="container">
             <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map" id="map">
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
-                    <div class="hex_inner" :class="{selected:(hex.unit == selectedUnit && hex.unit != undefined), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
-                        <hex v-if="hex.unit != undefined" :can="hex.can" :hex="hex" :unit.sync="hex.unit" :selected="hex.unit == selectedUnit && hex.unit != undefined"></hex>
-                            {{ hex.x}}-{{hex.y}}
+                    <div class="hex_inner" :class="{hover:playerTurn,selected:(hex.unit == selectedUnit && hex.unit != undefined && playerTurn), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
+                        <hex v-if="hex.unit != undefined" :can="hex.can" :hex="hex" :unit.sync="hex.unit" :selected="hex.unit == selectedUnit && hex.unit != undefined" :player-turn="playerTurn"></hex>
                     </div>
                 </div>
 
             </div>
 
-            <div class="info" :class="{left:cursor_on_left}" transition="movein" v-if="selectedUnit != undefined">
+            <div class="info" :class="{left:cursor_on_left}" transition="movein" v-if="selectedUnit != undefined" v-show="playerTurn">
 
                 <div class="unit_image" :class="[selectedUnit.type]"></div>
 
@@ -49,6 +48,17 @@
                 </div>
             </div>
         </div>
+        <!--<div class="turn_info" v-show="showMyTurn" transition="showMyTurn">-->
+            <!--<div class="gui basic four">-->
+                <!--Your turn-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="turn_info" v-show="startIntro" transition="showMyTurn">
+            <div class="gui basic four small">
+                Crush you enemy!
+            </div>
+        </div>
     </div>
 </template>
 
@@ -65,6 +75,9 @@
         props:['x','y', 'own','enemy','obstacles'],
         data: function () {
             return {
+                playerTurn:true,
+                showMyTurn:false,
+                startIntro:false,
 
                 screenX:100,
                 screenY:100,
@@ -185,6 +198,8 @@
 
             },
             selectHex: function (unitX, unitY, unit) {
+
+                if (!this.playerTurn) return;
 
                 if (this.selectedUnit != undefined && !this.selectedUnit.moving && this.selectedUnit.movable && this.selectedUnit.ap > 0) {
                     if (unit == undefined) {
@@ -457,6 +472,17 @@
                 return map;
             }
         },
+        watch:{
+            playerTurn: function () {
+                if (this.playerTurn) {
+                    var that = this;
+                    this.showMyTurn = true;
+                    setTimeout(function () {
+                        that.showMyTurn = false;
+                    }, 1500);
+                }
+            }
+        },
         vuex: {
             getters: {
             }
@@ -481,6 +507,11 @@
                 $('#map').draggable({
                     containment: [-leftMax ,-topMax, 0,topMin]
                 });
+                that.startIntro = true;
+
+                setTimeout(function () {
+                    that.startIntro = false;
+                }, 1500);
             })
         }
     }

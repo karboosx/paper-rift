@@ -61,6 +61,17 @@ body{
     height: 53px;
     padding: 42px 33px 44px 51px;
   }
+  &.four{
+    background-position: -119px -128px;
+    width: 311px;
+    height: 151px;
+    padding: 62px 33px 44px 51px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 56px;
+  }
 
   &.next_turn{
     background-image: url("./assets/images/gui/next_turn.png");
@@ -134,12 +145,15 @@ body{
   opacity: 0;
 }
 
-.opacity2-transition{
-  transition: 0.1s opacity ease-out;
+.showMyTurn-transition{
+  transition: 0.3s all ease-out;
   opacity: 1;
+  pointer-events: none;
+  top:0;
 
 }
 
-.opacity2-enter, .opacity2-leave{
+.showMyTurn-enter, .showMyTurn-leave{
   opacity: 0;
+  top:-100px;
 }

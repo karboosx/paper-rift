@@ -8,7 +8,7 @@
         <div class="unit rock" v-if="unit.type == 'rock'"></div>
         <div class="unit forest" v-if="unit.type == 'forest'"></div>
 
-        <div v-if="selected && unit.movable && !unit.moving" transition="opacity2">
+        <div v-if="selected && unit.movable && !unit.moving" v-show="playerTurn" transition="opacity2">
             <div class="move_arrow move leftup" v-if="can.leftup == 'move'"></div>
             <div class="move_arrow move rightup" v-if="can.rightup == 'move'"></div>
             <div class="move_arrow move leftdown" v-if="can.leftdown == 'move'"></div>
@@ -47,7 +47,7 @@
     import $ from 'jquery'
 
     export default {
-        props:['unit', 'can', 'selected', 'hex'],
+        props:['unit', 'can', 'selected', 'hex','player-turn'],
         data: function () {
             return {
                 animation:{
@@ -67,7 +67,7 @@
                 that.animation[animationName] = true;
                 this.animation.info = info;
                 newAnimation = setInterval(function () {
-                    var timeout = 200;
+                    var timeout = 60;
                     newAnimationTick ++;
 
                     if (newAnimationTick>timeout){

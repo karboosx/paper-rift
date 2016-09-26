@@ -43,7 +43,7 @@
       z-index: 1000;
     }
 
-    &:hover{
+    &.hover:hover{
       background-image: url("../../assets/images/gui/hex_hover.png");
     }
 
@@ -151,4 +151,19 @@
   left: 0px;
   text-align: right;
   z-index: 2000;
+}
+
+.turn_info{
+  position: absolute;
+  z-index: 100000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .gui.basic{
+    font-size: 51px;
+    color: #de0f34;
+  }
 }

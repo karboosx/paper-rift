@@ -11,12 +11,15 @@ var directions = {
 export default {
     methods:{
         tickAvailableEnemy: function () {
+            var that = this;
             for (var i = 0; i < this.map.length; i++) {
-                var hex = this.map[i];
+                let hex = this.map[i];
 
                 if (hex.unit != undefined && hex.unit.party == 'enemy') {
                     if (hex.unit.ap > 0) {
-                        this.tickEnemyHex(hex);
+                        setTimeout(function () {
+                            that.tickEnemyHex(hex);
+                        },50);
                         return true;
                     }
                 }
@@ -28,7 +31,7 @@ export default {
         findDirectionToNearestOwn: function (can, activeHex) {
             var bestLength = Infinity;
             var bestDirection = undefined;
-            var bestOption = 'move';
+            var bestOption = undefined;
             var data = undefined;
 
             if (activeHex.y%2 == 0){
@@ -97,6 +100,7 @@ export default {
 
         },
         nextEnemyTurnStart: function () {
+            this.playerTurn = false;
             this.tickAvailableEnemy();
         },
         nextEnemyTurnEnd: function () {
@@ -106,6 +110,8 @@ export default {
                 if (hex.unit != undefined && hex.unit.party == 'enemy')
                     hex.unit.ap = hex.unit.maxAp;
             }
+
+            this.playerTurn = true;
         },
     }
 }
