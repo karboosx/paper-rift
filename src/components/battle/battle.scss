@@ -59,9 +59,11 @@
 }
 
 .map{
+  background: url("../../assets/images/gui/grass.png");
   position: absolute;
-  top:30px;
-  left:30px;
+  top:20px;
+  left:0px;
+  min-width: 100vw;
 }
 
 .info{
@@ -69,14 +71,22 @@
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  z-index: 100000;
+  z-index: 100000000;
   pointer-events: none;
   width: 100vw;
+
+  transition:1s bottom, opacity, right ease-in;
+
+  &.left{
+    bottom: -210px;
+    right:-250px;
+    opacity: 0.7;
+  }
 
   .info_panel{
     display: flex;
     flex-wrap: wrap;
-    z-index: 100;
+    z-index: 10000;
     justify-content: space-around;
     letter-spacing: -2px;
     .information{
@@ -85,6 +95,7 @@
       &.big{
         width: 100%;
         text-align: center;
+        margin-bottom: 16px;
       }
       &.medium{
         width: 60%;
@@ -120,6 +131,7 @@
   width: 100vw;
   height: 48px;
   pointer-events: none;
+  z-index: 1000;
   background: url("../../assets/images/gui/wood.png") repeat-x;
 
   &.top{
@@ -134,12 +146,8 @@
 
 .next_turn{
   position: fixed;
-  bottom: -20px;
-  left: -247px;
+  bottom: 0px;
+  left: 0px;
   text-align: right;
-  z-index: 10000;
-
-  .gui{
-    width: 327px !important;
-  }
+  z-index: 2000;
 }

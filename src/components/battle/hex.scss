@@ -13,7 +13,7 @@
   height: 100px;
   position: relative;
   top: 0px;
-  transition: 0.15s all ease-out;
+  transition: 0.3s all linear;
 
   &.cavalry{
     background-image: url("../../assets/images/units/cavalry.png");
@@ -41,6 +41,20 @@
     &.active{
       background-image: url("../../assets/images/units/king_active.png");
     }
+  }
+  &.rock{
+    background-image: url("../../assets/images/units/rock.png");
+    width: 120px;
+    height: 131px;
+    left: -10px;
+    top:-10px;
+    pointer-events: none;
+  }
+  &.forest{
+    background-image: url("../../assets/images/units/forest.png");
+    width: 120px;
+    height: 131px;
+    pointer-events: none;
   }
 
 }
@@ -106,4 +120,40 @@
   }
 
 
+}
+
+.animation{
+  background-image: url("../../assets/images/gui/hex_icons.png");
+  background-repeat: no-repeat;
+  width: 60px;
+  height: 50px;
+  position: absolute;
+  top:20px;
+  left:20px;
+  pointer-events: none;
+
+  &.plusAp{
+    background-position: 0px 0px;
+  }
+  &.damage{
+    background-position: -60px 0px;
+  }
+  &.dodge{
+    background-position: -125px 0px;
+    .animation_info{
+      top: 28px;
+      font-size: 19px;
+    }
+  }
+
+  .animation_info{
+    color: #fff9fc;
+    left: -11px;
+    top: -6px;
+    text-align: center;
+    width: 80px;
+    position: absolute;
+    font-size: 30px;
+    text-shadow: 0px 0px 5px #000000;
+  }
 }

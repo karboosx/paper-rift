@@ -5,7 +5,10 @@
         <div :class="{active:selected}" class="unit king" v-if="unit.type == 'king'"></div>
         <div :class="{active:selected}" class="unit swordman" v-if="unit.type == 'swordman'"></div>
 
-        <div v-if="selected">
+        <div class="unit rock" v-if="unit.type == 'rock'"></div>
+        <div class="unit forest" v-if="unit.type == 'forest'"></div>
+
+        <div v-if="selected && unit.movable && !unit.moving" transition="opacity2">
             <div class="move_arrow move leftup" v-if="can.leftup == 'move'"></div>
             <div class="move_arrow move rightup" v-if="can.rightup == 'move'"></div>
             <div class="move_arrow move leftdown" v-if="can.leftdown == 'move'"></div>
@@ -22,6 +25,19 @@
             
             
         </div>
+
+        <div v-if="animation.plusAp" class="animation plusAp" transition="opacity"></div>
+        <div v-if="animation.damage" class="animation damage" transition="opacity">
+            <div class="animation_info">
+                {{ animation.info }}
+            </div>
+        </div>
+        <div v-if="animation.dodge" class="animation dodge" transition="opacity">
+            <div class="animation_info">
+                MISS
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -34,10 +50,50 @@
         props:['unit', 'can', 'selected'],
         data: function () {
             return {
-
+                animation:{
+                    info:'',
+                    plusAp:false,
+                    damage:false,
+                    dodge:false,
+                }
             }
         },
         methods:{
+            runAnimation: function (animationName, info) {
+                var newAnimation = undefined;
+                var newAnimationTick = 0;
+                var that = this;
+
+                that.animation[animationName] = true;
+                this.animation.info = info;
+                newAnimation = setInterval(function () {
+                    var timeout = 200;
+                    newAnimationTick ++;
+
+                    if (newAnimationTick>timeout){
+                        clearInterval(newAnimation);
+                        that.animation[animationName] = false;
+                        that.animation.info = '';
+                    }
+                }, 5);
+            }
+        },
+        watch:{
+            'unit.health': function (val, oldVal) {
+                if (val < oldVal) {
+                    this.runAnimation('damage', '-'+(oldVal-val))
+                }
+            },
+            'unit.ap': function (val, oldVal) {
+                if (val > oldVal) {
+                    this.runAnimation('plusAp')
+                }
+            },
+            'unit.dodge': function (val, oldVal) {
+                if (val > oldVal) {
+                    this.runAnimation('dodge')
+                }
+            }
         },
     }
 </script>
