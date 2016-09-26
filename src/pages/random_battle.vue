@@ -51,10 +51,10 @@
     }
     export default {
         data: function () {
-            var x = 15;
-            var y = 15;
+            var x = 12;
+            var y = 7;
 
-            var obstacles = makeMap(x, y, 6,4);
+            var obstacles = makeMap(x, y, 5,4);
 
             return {
                 x:x,

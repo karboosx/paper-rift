@@ -11,7 +11,8 @@
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{selected:(hex.unit == selectedUnit && hex.unit != undefined), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
-                        <hex v-if="hex.unit != undefined" :can="hex.can" :unit.sync="hex.unit" :selected="hex.unit == selectedUnit && hex.unit != undefined"></hex>
+                        <hex v-if="hex.unit != undefined" :can="hex.can" :hex="hex" :unit.sync="hex.unit" :selected="hex.unit == selectedUnit && hex.unit != undefined"></hex>
+                            {{ hex.x}}-{{hex.y}}
                     </div>
                 </div>
 
@@ -56,8 +57,10 @@
     import Vue from 'vue'
     import $ from 'jquery'
     import Hex from './hex.vue'
+    import EnemyAI from './enemy_ai'
 
     export default {
+        mixins:[EnemyAI],
         name:'battle',
         props:['x','y', 'own','enemy','obstacles'],
         data: function () {
@@ -79,6 +82,17 @@
             Hex
         },
         methods:{
+            canJump: function (unit, x,y) {
+                if (Math.abs(unit.x-x)>1 || Math.abs(unit.y-y)>1){
+                    return false;
+                }
+
+                if (unit.y%2 != 0 && unit.x+1==x && unit.y+1==y){
+                    return false;
+                }
+
+                return true;
+            },
             nextOwnTurn: function () {
                 for (var i = 0; i < this.own.length; i++) {
                     var unit = this.own[i];
@@ -86,27 +100,21 @@
                 }
             },
             nextEnemyTurn: function () {
-                for (var i = 0; i < this.own.length; i++) {
-                    var unit = this.own[i];
-
-//                    unit.ai(mapCords);
-
-                    unit.ap = unit.maxAp;
-                }
+                this.nextEnemyTurnStart();
             },
             nextTurn: function () {
                 this.nextOwnTurn();
                 this.nextEnemyTurn();
             },
-            makeUnitAttack: function (attacker, defender) {
+            makeUnitAttack: function (attacker, defender, callback) {
+                callback = callback || function (){};
 
                 var unit = attacker;
                 var x = defender.x;
                 var y = defender.y;
 
-                if (Math.abs(unit.x-x)>1 || Math.abs(unit.y-y)>1){
-                    return false;
-                }
+                if (!this.canJump(unit,x,y)) return false;
+
                 var newAnimation = undefined;
                 var newAnimationTick = 0;
 
@@ -169,6 +177,8 @@
                         unit.left = 0;
                         unit.top = 0;
                         unit.moving = false;
+
+                        callback(unit, this);
                     }
                 }, 5);
 
@@ -212,11 +222,10 @@
 
 
             },
-            makeUnitMove: function (unit,x,y) {
+            makeUnitMove: function (unit,x,y, callback) {
+                callback = callback || function (){};
 
-                if (Math.abs(unit.x-x)>1 || Math.abs(unit.y-y)>1){
-                    return false;
-                }
+                if (!this.canJump(unit,x,y)) return false;
 
                 var newAnimation = undefined;
                 var newAnimationTick = 0;
@@ -271,6 +280,8 @@
                         unit.left = 0;
                         unit.top = 0;
                         unit.moving = false;
+
+                        callback(unit, this);
                     }
                 }, 5);
 
@@ -363,84 +374,85 @@
 
                 for (var i = 0; i < map.length; i++) {
                     var unitPack = map[i];
-                    var can = {left:'move', right:'move', leftup:'move', rightup:'move', leftdown:'move', rightdown:'move'};
 
-                    if (unitPack.x==0) {
-                        can.left = false;
-                        if (unitPack.y%2 != 0){
-                            can.leftup = false;
-                            can.leftdown = false;
+                    if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
+                        var can = {left: 'move', right: 'move', leftup: 'move', rightup: 'move', leftdown: 'move', rightdown: 'move'};
+
+                        if (unitPack.x == 0) {
+                            can.left = false;
+                            if (unitPack.y % 2 != 0) {
+                                can.leftup = false;
+                                can.leftdown = false;
+                            }
                         }
-                    }
 
-                    if (unitPack.y==0) {
-                        can.leftup = false;
-                        can.rightup = false;
-                    }
-
-                    if (unitPack.y==this.y-1) {
-                        can.leftdown = false;
-                        can.rightdown = false;
-                    }
-
-                    if (unitPack.x==this.x-1) {
-                        can.right = false;
-                        if (unitPack.y%2 == 0){
+                        if (unitPack.y == 0) {
+                            can.leftup = false;
                             can.rightup = false;
+                        }
+
+                        if (unitPack.y == this.y - 1) {
+                            can.leftdown = false;
                             can.rightdown = false;
                         }
+
+                        if (unitPack.x == this.x - 1) {
+                            can.right = false;
+                            if (unitPack.y % 2 == 0) {
+                                can.rightup = false;
+                                can.rightdown = false;
+                            }
+                        }
+
+                        if (this.ownArmy[unitPack.x - 1] != undefined && this.ownArmy[unitPack.x - 1][unitPack.y] != undefined) can.left = 'own';
+                        if (this.ownArmy[unitPack.x + 1] != undefined && this.ownArmy[unitPack.x + 1][unitPack.y] != undefined) can.right = 'own';
+
+                        if (unitPack.y % 2 != 0 && this.ownArmy[unitPack.x - 1] != undefined && this.ownArmy[unitPack.x - 1][unitPack.y - 1] != undefined) can.leftup = 'own';
+                        if (unitPack.y % 2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y - 1] != undefined) can.leftup = 'own';
+
+                        if (unitPack.y % 2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y - 1] != undefined) can.rightup = 'own';
+                        if (unitPack.y % 2 == 0 && this.ownArmy[unitPack.x + 1] != undefined && this.ownArmy[unitPack.x + 1][unitPack.y - 1] != undefined) can.rightup = 'own';
+
+                        if (unitPack.y % 2 != 0 && this.ownArmy[unitPack.x - 1] != undefined && this.ownArmy[unitPack.x - 1][unitPack.y + 1] != undefined) can.leftdown = 'own';
+                        if (unitPack.y % 2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y + 1] != undefined) can.leftdown = 'own';
+
+                        if (unitPack.y % 2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = 'own';
+                        if (unitPack.y % 2 == 0 && this.ownArmy[unitPack.x + 1] != undefined && this.ownArmy[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = 'own';
+
+                        if (this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y] != undefined) can.left = false;
+                        if (this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y] != undefined) can.right = false;
+
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y - 1] != undefined) can.leftup = false;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.leftup = false;
+
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.rightup = false;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y - 1] != undefined) can.rightup = false;
+
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y + 1] != undefined) can.leftdown = false;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.leftdown = false;
+
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = false;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = false;
+
+
+                        if (this.enemyArmy[unitPack.x - 1] != undefined && this.enemyArmy[unitPack.x - 1][unitPack.y] != undefined) can.left = 'enemy';
+                        if (this.enemyArmy[unitPack.x + 1] != undefined && this.enemyArmy[unitPack.x + 1][unitPack.y] != undefined) can.right = 'enemy';
+
+                        if (unitPack.y % 2 != 0 && this.enemyArmy[unitPack.x - 1] != undefined && this.enemyArmy[unitPack.x - 1][unitPack.y - 1] != undefined) can.leftup = 'enemy';
+                        if (unitPack.y % 2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y - 1] != undefined) can.leftup = 'enemy';
+
+                        if (unitPack.y % 2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y - 1] != undefined) can.rightup = 'enemy';
+                        if (unitPack.y % 2 == 0 && this.enemyArmy[unitPack.x + 1] != undefined && this.enemyArmy[unitPack.x + 1][unitPack.y - 1] != undefined) can.rightup = 'enemy';
+
+                        if (unitPack.y % 2 != 0 && this.enemyArmy[unitPack.x - 1] != undefined && this.enemyArmy[unitPack.x - 1][unitPack.y + 1] != undefined) can.leftdown = 'enemy';
+                        if (unitPack.y % 2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y + 1] != undefined) can.leftdown = 'enemy';
+
+                        if (unitPack.y % 2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = 'enemy';
+                        if (unitPack.y % 2 == 0 && this.enemyArmy[unitPack.x + 1] != undefined && this.enemyArmy[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = 'enemy';
+
+
+                        unitPack.can = can;
                     }
-
-                    if (this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y] != undefined) can.left = 'own';
-                    if (this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y] != undefined) can.right = 'own';
-
-                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y-1] != undefined) can.leftup = 'own';
-                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y-1] != undefined) can.leftup = 'own';
-
-                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y-1] != undefined) can.rightup = 'own';
-                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y-1] != undefined) can.rightup = 'own';
-
-                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x-1] != undefined && this.ownArmy[unitPack.x-1][unitPack.y+1] != undefined) can.leftdown = 'own';
-                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y+1] != undefined) can.leftdown = 'own';
-
-                    if (unitPack.y%2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y+1] != undefined) can.rightdown = 'own';
-                    if (unitPack.y%2 == 0 && this.ownArmy[unitPack.x+1] != undefined && this.ownArmy[unitPack.x+1][unitPack.y+1] != undefined) can.rightdown = 'own';
-                    
-                    if (this.obstaclesMap[unitPack.x-1] != undefined && this.obstaclesMap[unitPack.x-1][unitPack.y] != undefined) can.left = false;
-                    if (this.obstaclesMap[unitPack.x+1] != undefined && this.obstaclesMap[unitPack.x+1][unitPack.y] != undefined) can.right = false;
-
-                    if (unitPack.y%2 != 0 && this.obstaclesMap[unitPack.x-1] != undefined && this.obstaclesMap[unitPack.x-1][unitPack.y-1] != undefined) can.leftup = false;
-                    if (unitPack.y%2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y-1] != undefined) can.leftup = false;
-
-                    if (unitPack.y%2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y-1] != undefined) can.rightup = false;
-                    if (unitPack.y%2 == 0 && this.obstaclesMap[unitPack.x+1] != undefined && this.obstaclesMap[unitPack.x+1][unitPack.y-1] != undefined) can.rightup = false;
-
-                    if (unitPack.y%2 != 0 && this.obstaclesMap[unitPack.x-1] != undefined && this.obstaclesMap[unitPack.x-1][unitPack.y+1] != undefined) can.leftdown = false;
-                    if (unitPack.y%2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y+1] != undefined) can.leftdown = false;
-
-                    if (unitPack.y%2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y+1] != undefined) can.rightdown = false;
-                    if (unitPack.y%2 == 0 && this.obstaclesMap[unitPack.x+1] != undefined && this.obstaclesMap[unitPack.x+1][unitPack.y+1] != undefined) can.rightdown = false;
-                    
-                    
-                    
-                    if (this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y] != undefined) can.left = 'enemy';
-                    if (this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y] != undefined) can.right = 'enemy';
-
-                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y-1] != undefined) can.leftup = 'enemy';
-                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y-1] != undefined) can.leftup = 'enemy';
-
-                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y-1] != undefined) can.rightup = 'enemy';
-                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y-1] != undefined) can.rightup = 'enemy';
-
-                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x-1] != undefined && this.enemyArmy[unitPack.x-1][unitPack.y+1] != undefined) can.leftdown = 'enemy';
-                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y+1] != undefined) can.leftdown = 'enemy';
-
-                    if (unitPack.y%2 != 0 && this.enemyArmy[unitPack.x] != undefined && this.enemyArmy[unitPack.x][unitPack.y+1] != undefined) can.rightdown = 'enemy';
-                    if (unitPack.y%2 == 0 && this.enemyArmy[unitPack.x+1] != undefined && this.enemyArmy[unitPack.x+1][unitPack.y+1] != undefined) can.rightdown = 'enemy';
-
-                    
-
-                    unitPack.can = can;
                 }
                 return map;
             }

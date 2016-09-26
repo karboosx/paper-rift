@@ -47,7 +47,7 @@
     import $ from 'jquery'
 
     export default {
-        props:['unit', 'can', 'selected'],
+        props:['unit', 'can', 'selected', 'hex'],
         data: function () {
             return {
                 animation:{

@@ -50,6 +50,7 @@ export default function Unit() {
     this.defence = 10;
     this.speed = 10;
     this.maxAp = 1;
+    this.movments = {};
 
     this.ap = this.maxAp;
     this.party = undefined;
@@ -130,6 +131,10 @@ export default function Unit() {
             }
         }
 
+    }
+
+    this.distance = function (x, y) {
+        return Math.hypot(x-this.x, y-this.y);
     }
 
 }
