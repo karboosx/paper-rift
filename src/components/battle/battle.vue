@@ -11,7 +11,7 @@
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{hover:playerTurn,selected:(hex.unit == selectedUnit && hex.unit != undefined && playerTurn), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
-                        <hex v-if="hex.unit != undefined" :can="hex.can" :hex="hex" :unit.sync="hex.unit" :selected="hex.unit == selectedUnit && hex.unit != undefined" :player-turn="playerTurn"></hex>
+                        <hex v-if="hex.unit != undefined" :can.sync="hex.can" :hex="hex" :unit.sync="hex.unit" :adhesion.sync="hex.adhesion" :selected="hex.unit == selectedUnit && hex.unit != undefined" :player-turn="playerTurn"></hex>
                     </div>
                 </div>
 
@@ -21,21 +21,30 @@
 
                 <div class="unit_image" :class="[selectedUnit.type]"></div>
 
+                <div class="adhesion forest" v-show="selectedUnit.adhesion.forest" transition="movein_adhesion">
+                    {{ (bonus.forest.attack>0 ? '+'+bonus.forest.attack : bonus.forest.attack) }}
+                    <div class="icon small sword"></div>
+                </div>
+                <div class="adhesion rock" v-show="selectedUnit.adhesion.rock" transition="movein_adhesion">
+                    {{ (bonus.rock.defence>0 ? '+'+bonus.rock.defence : bonus.rock.defence) }}
+                    <div class="icon small shield"></div>
+                </div>
+
                 <div class="gui basic one info_panel">
                     <div class="information big">
                         {{ selectedUnit.name }}
                     </div>
-                    <div class="information">
+                    <div class="information" :class="{bouns:selectedUnit.adhesion.forest}">
                         <div class="icon small sword"></div>
-                        {{ selectedUnit.attack }}
+                        {{ selectedUnit.stats.attack }}
                     </div>
-                    <div class="information">
+                    <div class="information" :class="{bouns:selectedUnit.adhesion.rock}">
                         <div class="icon small shield"></div>
-                        {{ selectedUnit.defence }}
+                        {{ selectedUnit.stats.defence }}
                     </div>
                     <div class="information">
                         <div class="icon small boots"></div>
-                        {{ selectedUnit.speed }}%
+                        {{ selectedUnit.stats.speed }}%
                     </div>
                     <div class="information">
                         <div class="icon small arrow"></div>
@@ -68,6 +77,8 @@
     import $ from 'jquery'
     import Hex from './hex.vue'
     import EnemyAI from './enemy_ai'
+    import Unit from './unit'
+    import {bonus} from './unit'
 
     export default {
         mixins:[EnemyAI],
@@ -89,6 +100,8 @@
                 selectedX:undefined,
                 selectedY:undefined,
                 selectedUnit:undefined,
+
+                bonus:bonus
             }
         },
         components: {
@@ -308,6 +321,13 @@
             }
         },
         computed:{
+            adhesion: function () {
+                if (this.selectedUnit != undefined && this.selectedUnit.movable) {
+                    return this.selectedUnit.actualAdhesion;
+                }else{
+                    return {};
+                }
+            },
             cursor_on_left: function () {
                 return (this.cursorX > this.screenX-400 && this.cursorY > this.screenY-390);
             },
@@ -365,8 +385,11 @@
                             left:left,
                             top:y*this.sizeY,
                             unit:undefined,
-                            can:{}
+                            adhesion:{},
+                            can:{left: 'move', right: 'move', leftup: 'move', rightup: 'move', leftdown: 'move', rightdown: 'move'}
                         };
+
+
 
                         if (this.ownArmy[x] != undefined && this.ownArmy[x][y] != undefined){
                             unit.unit = this.ownArmy[x][y];
@@ -391,6 +414,7 @@
                     var unitPack = map[i];
 
                     if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
+
                         var can = {left: 'move', right: 'move', leftup: 'move', rightup: 'move', leftdown: 'move', rightdown: 'move'};
 
                         if (unitPack.x == 0) {
@@ -434,21 +458,20 @@
                         if (unitPack.y % 2 != 0 && this.ownArmy[unitPack.x] != undefined && this.ownArmy[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = 'own';
                         if (unitPack.y % 2 == 0 && this.ownArmy[unitPack.x + 1] != undefined && this.ownArmy[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = 'own';
 
-                        if (this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y] != undefined) can.left = false;
-                        if (this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y] != undefined) can.right = false;
+                        if (this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y] != undefined) can.left = this.obstaclesMap[unitPack.x - 1][unitPack.y].type;
+                        if (this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y] != undefined) can.right = this.obstaclesMap[unitPack.x + 1][unitPack.y].type;
 
-                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y - 1] != undefined) can.leftup = false;
-                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.leftup = false;
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y - 1] != undefined) can.leftup = this.obstaclesMap[unitPack.x - 1][unitPack.y - 1].type;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.leftup = this.obstaclesMap[unitPack.x][unitPack.y - 1].type;
 
-                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.rightup = false;
-                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y - 1] != undefined) can.rightup = false;
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y - 1] != undefined) can.rightup = this.obstaclesMap[unitPack.x][unitPack.y - 1].type;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y - 1] != undefined) can.rightup = this.obstaclesMap[unitPack.x + 1][unitPack.y - 1].type;
 
-                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y + 1] != undefined) can.leftdown = false;
-                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.leftdown = false;
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x - 1] != undefined && this.obstaclesMap[unitPack.x - 1][unitPack.y + 1] != undefined) can.leftdown = this.obstaclesMap[unitPack.x - 1][unitPack.y + 1].type;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.leftdown = this.obstaclesMap[unitPack.x][unitPack.y + 1].type;
 
-                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = false;
-                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = false;
-
+                        if (unitPack.y % 2 != 0 && this.obstaclesMap[unitPack.x] != undefined && this.obstaclesMap[unitPack.x][unitPack.y + 1] != undefined) can.rightdown = this.obstaclesMap[unitPack.x][unitPack.y + 1].type;
+                        if (unitPack.y % 2 == 0 && this.obstaclesMap[unitPack.x + 1] != undefined && this.obstaclesMap[unitPack.x + 1][unitPack.y + 1] != undefined) can.rightdown = this.obstaclesMap[unitPack.x + 1][unitPack.y + 1].type;
 
                         if (this.enemyArmy[unitPack.x - 1] != undefined && this.enemyArmy[unitPack.x - 1][unitPack.y] != undefined) can.left = 'enemy';
                         if (this.enemyArmy[unitPack.x + 1] != undefined && this.enemyArmy[unitPack.x + 1][unitPack.y] != undefined) can.right = 'enemy';
@@ -467,12 +490,29 @@
 
 
                         unitPack.can = can;
+
+                        if (unitPack.unit != undefined && unitPack.unit instanceof Unit) {
+                            unitPack.adhesion = unitPack.unit.getAdhesion(can);
+                            unitPack.unit.adhesion = unitPack.adhesion;
+
+                        } else {
+                            unitPack.adhesion = {};
+                        }
                     }
                 }
                 return map;
             }
         },
         watch:{
+            map:function(){
+                for (var i = 0; i < this.map.length; i++) {
+                    var unitPack = this.map[i];
+
+                    if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
+                        unitPack.unit.calculateStats();
+                    }
+                }
+            },
             playerTurn: function () {
                 if (this.playerTurn) {
                     var that = this;

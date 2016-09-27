@@ -27,7 +27,7 @@ Vue.use(VueRouter)
 
 var router = new VueRouter({
     hashbang: true,
-    history: true,
+    //history: true,
     linkActiveClass: 'active',
 })
 

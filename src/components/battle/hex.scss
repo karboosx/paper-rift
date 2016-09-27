@@ -2,6 +2,7 @@
   position: absolute;
   z-index: 1000;
   transition: 0.6s opacity ease-in;
+  pointer-events: none;
 
   &.used{
     opacity: 0.4;

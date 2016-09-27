@@ -135,6 +135,17 @@ body{
   bottom: -100px;
 }
 
+.movein_adhesion-transition{
+  position: absolute;
+  transition: 0.1s all ease-in;
+  opacity: 1;
+}
+
+.movein_adhesion-enter, .movein_adhesion-leave{
+  top: -100px;
+  opacity: 0;
+}
+
 .opacity-transition{
   transition: 0.1s opacity ease-out;
   opacity: 1;

@@ -84,6 +84,37 @@
     opacity: 0.7;
   }
 
+  .adhesion{
+    width: 129px;
+    height: 129px;
+    position: absolute;
+    z-index: 1000000;
+    margin-top: 15px;
+    margin-right: 33px;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    color: #e6efff;
+
+    &.forest{
+      background-image: url("../../assets/images/units/forest.png");
+      top: -52px;
+      right: 98px;
+      text-shadow: 0 0 9px #a24853;
+      margin-top: 35px;
+      height: 90px;
+      margin-bottom: 39px;
+    }
+    &.rock{
+      background-image: url("../../assets/images/units/rock.png");
+      top: -52px;
+      right: 12px;
+      text-shadow: 0 0 9px #006aa2;
+    }
+  }
+
   .info_panel{
     display: flex;
     flex-wrap: wrap;
@@ -91,6 +122,13 @@
     justify-content: space-around;
     letter-spacing: -2px;
     .information{
+
+      &.bouns{
+        //color: #1a873a;
+        color: #00c311;
+        text-shadow: 0px 0px 7px rgba(255, 255, 255, 0.3);
+      }
+
       width: 33%;
 
       &.big{

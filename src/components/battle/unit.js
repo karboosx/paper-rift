@@ -1,4 +1,4 @@
-var units = {
+export var units = {
     king: {
         hp: 30,
         attack: 3,
@@ -33,6 +33,11 @@ var units = {
     },
 }
 
+export var bonus = {
+    forest: {attack:10,defence:0,speed:0},
+    rock: {attack:0,defence:10,speed:0}
+}
+
 export default function Unit() {
     this.x = undefined;
     this.y = undefined;
@@ -50,6 +55,9 @@ export default function Unit() {
     this.defence = 10;
     this.speed = 10;
     this.maxAp = 1;
+    this.adhesion = {};
+    this.stats = {};
+
     this.movments = {};
 
     this.ap = this.maxAp;
@@ -88,6 +96,29 @@ export default function Unit() {
         return this;
     }
 
+
+    this.checkAdhesion= function (type, can) {
+        if (can.left == type) return true;
+        if (can.leftup == type) return true;
+        if (can.leftdown == type) return true;
+        if (can.right == type) return true;
+        if (can.rightup == type) return true;
+        if (can.rightdown == type) return true;
+
+        return false;
+
+    };
+
+    this.getAdhesion = function (can) {
+        var that = this;
+        var adhesion = {
+            forest: that.checkAdhesion('forest',can),
+            rock: that.checkAdhesion('rock',can),
+        };
+
+        return adhesion;
+    };
+
     this.setAttributes = function () {
         let attributes = units[this.type];
 
@@ -110,12 +141,12 @@ export default function Unit() {
     this.attackUnit = function (target) {
         this.ap --;
 
-        if (Math.floor(Math.random() * 100) < target.speed) {
+        if (Math.floor(Math.random() * 100) < target.stats.speed) {
             //dodge
             target.dodge++;
         } else {
             //hit
-            let attack = this.attack - target.defence;
+            let attack = this.stats.attack - target.stats.defence;
             if (attack < 0) attack = 1;
             attack = Math.floor(Math.random() * (attack+1));
 
@@ -135,6 +166,25 @@ export default function Unit() {
 
     this.distance = function (x, y) {
         return Math.hypot(x-this.x, y-this.y);
+    }
+
+    this.calculateStats = function () {
+        let stats = {
+            attack: this.attack,
+            defence: this.defence,
+            speed: this.speed,
+        };
+
+        for (var adhesion in this.adhesion) {
+
+            if (this.adhesion[adhesion] && bonus.hasOwnProperty(adhesion)) {
+                for (var stat in stats) {
+                    stats[stat] += bonus[adhesion][stat];
+                }
+            }
+        }
+
+        this.stats = stats;
     }
 
 }
