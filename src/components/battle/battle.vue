@@ -11,7 +11,7 @@
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{hover:playerTurn,selected:(hex.unit == selectedUnit && hex.unit != undefined && playerTurn), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
-                        <hex v-if="hex.unit != undefined" :can.sync="hex.can" :hex="hex" :unit.sync="hex.unit" :adhesion.sync="hex.adhesion" :selected="hex.unit == selectedUnit && hex.unit != undefined" :player-turn="playerTurn"></hex>
+                        <hex v-if="hex.unit != undefined" :can.sync="hex.can" :hex="hex" :range="(selectedUnit != undefined ? selectedUnit.inRange : [])" :unit.sync="hex.unit" :adhesion.sync="hex.adhesion" :selected="hex.unit == selectedUnit && hex.unit != undefined" :player-turn="playerTurn"></hex>
                     </div>
                 </div>
 
@@ -132,6 +132,22 @@
                 this.nextOwnTurn();
                 this.nextEnemyTurn();
             },
+            inRange: function (attacker, target) {
+//                attacker.calculateRange();
+                var attackerRange = attacker.inRange;
+
+                if (attacker.rangeAttack) {
+                    for (var i = 0; i < attackerRange.length; i++) {
+                        var unitPack = attackerRange[i];
+
+                        if (target == unitPack.unit) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            },
             makeUnitAttack: function (attacker, defender, callback) {
                 callback = callback || function (){};
 
@@ -139,74 +155,114 @@
                 var x = defender.x;
                 var y = defender.y;
 
-                if (!this.canJump(unit,x,y)) return false;
+                var inRange = this.inRange(attacker,defender);
+
+                if (!this.canJump(unit,x,y) && !inRange) return false;
 
                 var newAnimation = undefined;
                 var newAnimationTick = 0;
 
                 unit.moving = true;
-                attacker.attackUnit(defender);
-                defender.defendUnit(attacker);
-
-
-                newAnimation = setInterval(function () {
+                if (inRange) {
                     var timeout = 100;
-                    var left = 1;
-                    var top = 1;
 
-                    if (newAnimationTick>Math.floor(timeout/3)){
-                        left = -1;
-                        top = -1;
+                    var startX = attacker.x * this.sizeX;
+                    var startY = attacker.y * this.sizeY;
+
+                    var stopX = defender.x * this.sizeX;
+                    var stopY = defender.y * this.sizeY;
+
+                    if (defender.y%2 == 0){
+                        stopY += this.sizeY/2;
                     }
 
-                    if (unit.y == y && unit.x < x){
-                        unit.left += 1 * left;
-                    }
+                    var directionX = (stopX - startX) / timeout;
+                    var directionY = (stopY - startY)/timeout;
 
-                    if (unit.y == y && unit.x > x){
-                        unit.left -= 1 * left;
-                    }
+                    unit.showArrow = true;
 
-                    if ((unit.y < y && unit.x == x && unit.y%2 == 0) || (unit.y < y && unit.x > x && unit.y%2 != 0)){
-                        unit.left -= 0.55 * left;
-                        unit.top += 1 * top;
-                        timeout = 90;
-                    }
+                    newAnimation = setInterval(function () {
 
-                    if ((unit.y < y && unit.x < x && unit.y%2 == 0) || (unit.y < y && unit.x == x && unit.y%2 != 0)){
-                        unit.left += 0.55 * left;
-                        unit.top += 1 * top;
-                        timeout = 90;
-                    }
+                        unit.arrowLeft = (directionX)*newAnimationTick;
+                        unit.arrowTop = (directionY)*newAnimationTick;
 
-                    if ((unit.y > y && unit.x == x && unit.y%2 == 0) || (unit.y > y && unit.x > x && unit.y%2 != 0)){
-                        unit.left -= 0.55 * left;
-                        unit.top -= 1 * top;
-                        timeout = 90;
-                    }
+                        newAnimationTick++;
 
-                    if ((unit.y > y && unit.x < x && unit.y%2 == 0) || (unit.y > y && unit.x == x && unit.y%2 != 0)){
-                        unit.left += 0.55 * left;
-                        unit.top -= 1 * top;
-                        timeout = 90;
-                    }
+                        if (newAnimationTick > timeout) {
+                            clearInterval(newAnimation);
+                            attacker.attackUnit(defender, 'range');
+                            defender.defendUnit(attacker, 'range');
 
-                    newAnimationTick ++;
+                            unit.arrowLeft = 0;
+                            unit.arrowTop = 0;
+                            unit.showArrow = false;
+                            unit.moving = false;
+                            callback(unit, this);
+                        }
+                    }, 9);
+                }else {
+                    attacker.attackUnit(defender);
+                    defender.defendUnit(attacker);
 
-                    if (Math.random()*100<15)
-                        unit.rotation = Math.floor((Math.random()-0.5)*15);
+                    newAnimation = setInterval(function () {
+                        var timeout = 100;
+                        var left = 1;
+                        var top = 1;
 
-                    if (newAnimationTick>timeout/(3/2)){
-                        clearInterval(newAnimation);
+                        if (newAnimationTick > Math.floor(timeout / 3)) {
+                            left = -1;
+                            top = -1;
+                        }
 
-                        unit.rotation = 0;
-                        unit.left = 0;
-                        unit.top = 0;
-                        unit.moving = false;
+                        if (unit.y == y && unit.x < x) {
+                            unit.left += 1 * left;
+                        }
 
-                        callback(unit, this);
-                    }
-                }, 5);
+                        if (unit.y == y && unit.x > x) {
+                            unit.left -= 1 * left;
+                        }
+
+                        if ((unit.y < y && unit.x == x && unit.y % 2 == 0) || (unit.y < y && unit.x > x && unit.y % 2 != 0)) {
+                            unit.left -= 0.55 * left;
+                            unit.top += 1 * top;
+                            timeout = 90;
+                        }
+
+                        if ((unit.y < y && unit.x < x && unit.y % 2 == 0) || (unit.y < y && unit.x == x && unit.y % 2 != 0)) {
+                            unit.left += 0.55 * left;
+                            unit.top += 1 * top;
+                            timeout = 90;
+                        }
+
+                        if ((unit.y > y && unit.x == x && unit.y % 2 == 0) || (unit.y > y && unit.x > x && unit.y % 2 != 0)) {
+                            unit.left -= 0.55 * left;
+                            unit.top -= 1 * top;
+                            timeout = 90;
+                        }
+
+                        if ((unit.y > y && unit.x < x && unit.y % 2 == 0) || (unit.y > y && unit.x == x && unit.y % 2 != 0)) {
+                            unit.left += 0.55 * left;
+                            unit.top -= 1 * top;
+                            timeout = 90;
+                        }
+
+                        newAnimationTick++;
+
+                        if (Math.random() * 100 < 15)
+                            unit.rotation = Math.floor((Math.random() - 0.5) * 15);
+
+                        if (newAnimationTick > timeout / (3 / 2)) {
+                            clearInterval(newAnimation);
+
+                            unit.rotation = 0;
+                            unit.left = 0;
+                            unit.top = 0;
+                            unit.moving = false;
+
+                            callback(unit, this);
+                        }
+                    }, 5);
+                }
 
 
             },
@@ -318,6 +374,19 @@
             moveCursor: function (event) {
                 this.cursorX = event.pageX;
                 this.cursorY = event.pageY;
+            },
+            calculateStats: function () {
+                for (var i = 0; i < this.map.length; i++) {
+                    var unitPack = this.map[i];
+
+                    if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
+                        unitPack.unit.calculateStats();
+
+                        if (unitPack.unit.rangeAttack) {
+                            unitPack.unit.calculateRange(this.map);
+                        }
+                    }
+                }
             }
         },
         computed:{
@@ -371,7 +440,6 @@
                 }
                 return army;
             },
-
             map: function () {
                 var map = [];
                 for (let x = 0; x<this.x;x++){
@@ -505,13 +573,7 @@
         },
         watch:{
             map:function(){
-                for (var i = 0; i < this.map.length; i++) {
-                    var unitPack = this.map[i];
-
-                    if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
-                        unitPack.unit.calculateStats();
-                    }
-                }
+                this.calculateStats();
             },
             playerTurn: function () {
                 if (this.playerTurn) {
@@ -530,6 +592,7 @@
         created: function () {
             var that = this;
             Vue.nextTick(function () {
+
                 var body = $('body');
                 var width = body.width();
                 var height = body.height();
@@ -552,6 +615,8 @@
                 setTimeout(function () {
                     that.startIntro = false;
                 }, 1500);
+
+                that.calculateStats();
             })
         }
     }

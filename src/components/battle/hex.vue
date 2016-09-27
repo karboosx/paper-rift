@@ -15,15 +15,20 @@
             <div class="move_arrow enemy left" v-if="can.left == 'enemy'"></div>
             <div class="move_arrow enemy right" v-if="can.right == 'enemy'"></div>
 
-
         </div>
+
+        <div :style="{top:unit.arrowTop+'px',left:unit.arrowLeft+'px'}" class="arrow_animation" v-if="unit != undefined && unit.showArrow"></div>
+
         <div :class="{active:selected}" class="unit cavalry" v-if="unit.type == 'cavalry'"></div>
         <div :class="{active:selected}" class="unit axemen" v-if="unit.type == 'axemen'"></div>
         <div :class="{active:selected}" class="unit king" v-if="unit.type == 'king'"></div>
         <div :class="{active:selected}" class="unit swordman" v-if="unit.type == 'swordman'"></div>
+        <div :class="{active:selected}" class="unit archer" v-if="unit.type == 'archer'"></div>
 
         <div class="unit rock" v-if="unit.type == 'rock'"></div>
         <div class="unit forest" v-if="unit.type == 'forest'"></div>
+
+        <div v-if="inRange" class="inRange" transition="opacity"></div>
 
         <div v-if="animation.plusAp" class="animation plusAp" transition="opacity"></div>
         <div v-if="animation.damage" class="animation damage" transition="opacity">
@@ -46,7 +51,7 @@
     import $ from 'jquery'
 
     export default {
-        props:['unit', 'can', 'selected', 'hex','player-turn', 'adhesion'],
+        props:['unit', 'can', 'selected', 'hex','player-turn', 'adhesion', 'range'],
         data: function () {
             var that = this;
             return {
@@ -56,6 +61,21 @@
                     damage:false,
                     dodge:false,
                 }
+            }
+        },
+        computed:{
+            inRange: function () {
+                if (this.range != undefined) {
+                    for (var i = 0; i < this.range.length; i++) {
+                        var unitPack = this.range[i];
+
+                        if (this.unit == unitPack.unit) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
         },
         methods:{

@@ -64,8 +64,11 @@
                     new Unit().setPos(0,2).setType('cavalry').setParty('player'),
                     new Unit().setPos(0,3).setType('swordman').setParty('player'),
                     new Unit().setPos(0,4).setType('king').setParty('player'),
+                    new Unit().setPos(0,5).setType('archer').setParty('player'),
                 ],
                 enemy:[
+                    new Unit().setPos(3,2).setType('axemen').setParty('enemy').setMovable(false),
+
                     new Unit().setPos(x-1,1).setType('axemen').setParty('enemy').setMovable(false),
                     new Unit().setPos(x-1,2).setType('cavalry').setParty('enemy').setMovable(false),
                     new Unit().setPos(x-1,3).setType('swordman').setParty('enemy').setMovable(false),

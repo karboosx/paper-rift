@@ -43,6 +43,14 @@
       background-image: url("../../assets/images/units/king_active.png");
     }
   }
+
+  &.archer{
+    background-image: url("../../assets/images/units/archer.png");
+    &.active{
+      background-image: url("../../assets/images/units/archer.png");
+    }
+  }
+
   &.rock{
     background-image: url("../../assets/images/units/rock.png");
     width: 120px;
@@ -157,4 +165,25 @@
     font-size: 30px;
     text-shadow: 0px 0px 5px #000000;
   }
+}
+
+.inRange{
+  background: url("../../assets/images/gui/bow.png") no-repeat;
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top:-5px;
+  left:-10px;
+}
+
+@keyframes arrow_play {
+  0% { background-position: 0px; }
+  100% { background-position: -400px; }
+}
+.arrow_animation{
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  background: url('../../assets/images/gui/arrows.png') left center;
+  animation: arrow_play .3s steps(4) infinite;
 }

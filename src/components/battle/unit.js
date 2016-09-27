@@ -5,6 +5,8 @@ export var units = {
         defence: 8,
         speed: 10,
         ap: 1,
+        range_attack: false,
+        range: 0,
         name: 'King'
     },
     cavalry: {
@@ -13,6 +15,8 @@ export var units = {
         defence: 0,
         speed: 30,
         ap: 2,
+        range_attack: false,
+        range: 0,
         name: 'Cavalry'
     },
     swordman: {
@@ -21,6 +25,8 @@ export var units = {
         defence: 2,
         speed: 35,
         ap: 1,
+        range_attack: false,
+        range: 0,
         name: 'Swordsman'
     },
     axemen: {
@@ -29,7 +35,19 @@ export var units = {
         defence: 4,
         speed: 10,
         ap: 1,
+        range_attack: false,
+        range: 0,
         name: 'Axeman'
+    },
+    archer: {
+        hp: 20,
+        attack: 2,
+        defence: 4,
+        speed: 10,
+        ap: 1,
+        range_attack: true,
+        range: 10,
+        name: 'Archers'
     },
 }
 
@@ -44,6 +62,10 @@ export default function Unit() {
     this.type = undefined;
     this.left = 0;
     this.top = 0;
+    this.arrowLeft = 0;
+    this.arrowTop = 0;
+    this.showArrow = false;
+
     this.rotation = 0;
     this.top = 0;
     this.movable = true;
@@ -57,6 +79,8 @@ export default function Unit() {
     this.maxAp = 1;
     this.adhesion = {};
     this.stats = {};
+    this.rangeAttack = false;
+    this.range = 0;
 
     this.movments = {};
 
@@ -122,6 +146,9 @@ export default function Unit() {
     this.setAttributes = function () {
         let attributes = units[this.type];
 
+        this.rangeAttack = attributes.range_attack;
+        this.range = attributes.range;
+
         this.maxHealth = attributes.hp;
         this.health = this.maxHealth;
         this.attack = attributes.attack;
@@ -185,6 +212,23 @@ export default function Unit() {
         }
 
         this.stats = stats;
+    }
+
+    this.inRange = [];
+
+    this.calculateRange = function (map) {
+        var inRange = [];
+
+        for (var i = 0; i < map.length; i++) {
+            var unitPack = map[i];
+
+            if (this.distance(unitPack.x, unitPack.y) <= this.range && unitPack.unit != undefined && unitPack.unit.party != undefined && unitPack.unit.party != this.party ){
+                inRange.push(unitPack);
+            }
+        }
+
+
+        this.inRange = inRange;
     }
 
 }
