@@ -24,7 +24,7 @@
                 continue;
             }
 
-            if (randX == x) {
+            if (randX == x-1) {
                 continue;
             }
 
@@ -39,7 +39,7 @@
                     continue;
                 }
 
-                if (randX+randXplus == x) {
+                if (randX+randXplus == x-1) {
                     continue;
                 }
                 obstacles.push({x:randX+randXplus,y:randY+randYplus,type:obstacleType});
@@ -60,19 +60,19 @@
                 x:x,
                 y:y,
                 own:[
-//                    new Unit().setPos(0,1).setType('axemen').setParty('player'),
-//                    new Unit().setPos(0,2).setType('cavalry').setParty('player'),
-//                    new Unit().setPos(0,3).setType('swordman').setParty('player'),
-//                    new Unit().setPos(0,4).setType('king').setParty('player'),
+                    new Unit().setPos(0,1).setType('axemen').setParty('player'),
+                    new Unit().setPos(0,2).setType('cavalry').setParty('player'),
+                    new Unit().setPos(0,3).setType('swordman').setParty('player'),
+                    new Unit().setPos(0,4).setType('king').setParty('player'),
                     new Unit().setPos(0,5).setType('archer').setParty('player'),
                 ],
                 enemy:[
                     new Unit().setPos(3,2).setType('archer').setParty('enemy').setMovable(false),
 
-//                    new Unit().setPos(x-1,1).setType('archer').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,2).setType('archer').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,3).setType('archer').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,4).setType('king').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,1).setType('archer').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,2).setType('archer').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,3).setType('archer').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,4).setType('king').setParty('enemy').setMovable(false),
 
 //                    new Unit().setPos(8,3).setType('king').setParty('enemy').setMovable(false),
 //                    new Unit().setPos(8,4).setType('cavalry').setParty('enemy').setMovable(false),
