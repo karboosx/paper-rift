@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.8.0",
+    "howler": "^2.0.0",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.1",
     "jquery.easing": "^1.4.1",

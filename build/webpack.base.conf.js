@@ -59,7 +59,14 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+      {
+          test: /\.(mp3|ogg)(\?.*)?$/,
+          loader: 'file',
+          query: {
+              name: utils.assetsPath('sound/[name].[hash:7].[ext]')
+          }
+      },
     ]
   },
   vue: {

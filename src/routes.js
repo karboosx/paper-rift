@@ -4,11 +4,13 @@ import RandomBattle from './pages/random_battle.vue'
 var routes = {
     '/': {
         name: 'index',
-        component: Index
+        component: Index,
+        music:'menu'
     },
     '/random_battle': {
         name: 'random_battle',
-        component: RandomBattle
+        component: RandomBattle,
+        music:'battle'
     },
 };
 

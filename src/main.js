@@ -6,6 +6,7 @@ var VueRouter = require('vue-router')
 import store from './vuex/store'
 import routes from './routes'
 import config from './config'
+import SoundManager from './sound/manager'
 
 require('./app.scss')
 
@@ -52,6 +53,18 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 router.map(routes)
+
+router.beforeEach(function ({ to, next }) {
+
+    if (to.music != undefined) {
+        setTimeout(function () {
+            SoundManager.playMusic(to.music);
+        });
+    }
+
+    next()
+
+})
 
 router.redirect({
     '*': '/'
