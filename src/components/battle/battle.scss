@@ -209,3 +209,42 @@
     color: #de0f34;
   }
 }
+
+.finish{
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  z-index: 100000000;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  &.win{
+    background: #0b76cc;
+    .text{
+      font-size: 2em;
+      color: #22ba4d;
+    }
+    .link{
+      font-size: 2em;
+      color: #c66246;
+    }
+  }
+
+  &.lose{
+    background: #011823;
+    .text{
+      font-size: 2em;
+      color: #ba3f3b;
+    }
+    .link{
+      font-size: 2em;
+      color: #e8ddea;
+    }
+  }
+
+}

@@ -1,5 +1,18 @@
 <template>
     <div @mousemove="moveCursor">
+        <div class="finish win" v-if="win">
+            <div>
+                <div class="text">You win!</div>
+                <div class="link" v-link="{name:'camp'}">Back to camp</div>
+            </div>
+        </div>
+        <div class="finish lose" v-if="lose">
+            <div>
+                <div class="text">You lose!</div>
+                <div class="link" v-link="{name:'camp'}">Back to menu</div>
+            </div>
+        </div>
+
         <div class="ornament top"></div>
         <div class="ornament bottom"></div>
         <div class="next_turn">
@@ -407,6 +420,33 @@
             }
         },
         computed:{
+            win: function () {
+                var win = true;
+                for (var i = 0; i < this.enemy.length; i++) {
+                    var unit = this.enemy[i];
+
+                    if (unit.health > 0){
+                        win = false;
+                        break;
+                    }
+                }
+
+                return win;
+            },
+            lose: function () {
+                var lose = true;
+                for (var i = 0; i < this.own.length; i++) {
+                    var unit = this.own[i];
+
+                    if (unit.health > 0){
+                        lose = false;
+                        break;
+                    }
+                }
+
+                return lose;
+            },
+
             adhesion: function () {
                 if (this.selectedUnit != undefined && this.selectedUnit.movable) {
                     return this.selectedUnit.actualAdhesion;

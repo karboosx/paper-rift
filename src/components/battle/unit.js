@@ -1,4 +1,5 @@
 import SoundManager from '../../sound/manager'
+import Vue from 'vue'
 
 export var units = {
     king: {
@@ -42,7 +43,7 @@ export var units = {
         name: 'Axeman'
     },
     archer: {
-        hp: 1,
+        hp: 15,
         attack: 4,
         defence: 0,
         speed: 10,

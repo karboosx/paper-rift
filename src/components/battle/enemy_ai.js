@@ -12,8 +12,9 @@ export default {
     methods:{
         tickAvailableEnemy: function () {
             var that = this;
-
+            
             if (this.map != undefined) {
+
                 for (var i = 0; i < this.map.length; i++) {
                     let hex = this.map[i];
 
@@ -136,6 +137,8 @@ export default {
                 this.makeUnitAttack(hex.unit, action.data.unit, function () {
                     return that.tickAvailableEnemy();
                 })
+            }else{
+                that.tickAvailableEnemy();
             }
 
         },

@@ -7,6 +7,11 @@ var routes = {
         component: Index,
         music:'menu'
     },
+    '/camp': {
+        name: 'camp',
+        component: Index,
+        music:'menu'
+    },
     '/random_battle': {
         name: 'random_battle',
         component: RandomBattle,

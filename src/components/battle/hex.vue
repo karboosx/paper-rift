@@ -41,15 +41,15 @@
             <div class="unit forest" v-if="unit.type == 'forest'"></div>
 
         </div>
-        <div v-if="inRange && playerTurn" class="inRange" transition_off="opacity"></div>
+        <div v-if="inRange && playerTurn" class="inRange"></div>
 
-        <div v-if="animation.plusAp" class="animation plusAp" transition_off="opacity"></div>
-        <div v-if="animation.damage" class="animation damage" transition_off="opacity">
+        <div v-if="animation.plusAp" class="animation plusAp"></div>
+        <div v-if="animation.damage" class="animation damage">
             <div class="animation_info">
                 {{ animation.info }}
             </div>
         </div>
-        <div v-if="animation.dodge" class="animation dodge" transition_off="opacity">
+        <div v-if="animation.dodge" class="animation dodge">
             <div class="animation_info">
                 MISS
             </div>

@@ -16,6 +16,13 @@ var sounds = {
     unit_death: {
         src:[require('../assets/sounds/173126__replix__death-sound-male.mp3')],
     },
+    win: {
+        src:[require('../assets/sounds/346379__snv1985__fanfare-short-edit.mp3')],
+    },
+    lose: {
+        src:[require('../assets/sounds/178875__rocotilos__you-lose-evil.mp3')],
+    },
+
 
 };
 
