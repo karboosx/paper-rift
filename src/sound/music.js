@@ -27,7 +27,7 @@ var manager = {
     },
     play: function (music) {
         this.stopAllMusic();
-        //musicHowlers[music].play();
+        musicHowlers[music].play();
     }
 }
 export default manager;
