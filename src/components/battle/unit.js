@@ -1,8 +1,8 @@
 export var units = {
     king: {
-        hp: 30,
-        attack: 3,
-        defence: 8,
+        hp: 50,
+        attack: 10,
+        defence: 4,
         speed: 10,
         ap: 1,
         range_attack: false,
@@ -10,50 +10,50 @@ export var units = {
         name: 'King'
     },
     cavalry: {
-        hp: 30,
-        attack: 2,
-        defence: 0,
+        hp: 20,
+        attack: 4,
+        defence: 3,
         speed: 30,
-        ap: 2,
+        ap: 3,
         range_attack: false,
         range: 0,
         name: 'Cavalry'
     },
     swordman: {
         hp: 15,
-        attack: 1,
+        attack: 5,
         defence: 2,
-        speed: 35,
-        ap: 1,
+        speed: 10,
+        ap: 2,
         range_attack: false,
         range: 0,
         name: 'Swordsman'
     },
     axemen: {
         hp: 20,
-        attack: 2,
-        defence: 4,
+        attack: 6,
+        defence: 1,
         speed: 10,
-        ap: 1,
+        ap: 2,
         range_attack: false,
         range: 0,
         name: 'Axeman'
     },
     archer: {
         hp: 20,
-        attack: 2,
-        defence: 4,
+        attack: 4,
+        defence: 0,
         speed: 10,
         ap: 1,
         range_attack: true,
-        range: 10,
+        range: 5,
         name: 'Archers'
     },
 }
 
 export var bonus = {
-    forest: {attack:10,defence:0,speed:0},
-    rock: {attack:0,defence:10,speed:0}
+    forest: {attack:2,defence:0,speed:0},
+    rock: {attack:0,defence:2,speed:0}
 }
 
 export default function Unit() {
@@ -174,10 +174,7 @@ export default function Unit() {
         } else {
             //hit
             let attack = this.stats.attack - target.stats.defence;
-            if (attack < 0) attack = 1;
-            attack = Math.floor(Math.random() * (attack+1));
-
-            if (attack == 0) attack = 1;
+            if (attack <= 0) attack = 1;
 
             target.health -= attack;
 

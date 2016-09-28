@@ -164,7 +164,6 @@
 
                 unit.moving = true;
                 if (inRange) {
-                    var timeout = 100;
 
                     var startX = attacker.x * this.sizeX;
                     var startY = attacker.y * this.sizeY;
@@ -173,8 +172,14 @@
                     var stopY = defender.y * this.sizeY;
 
                     if (defender.y%2 == 0){
-                        stopY += this.sizeY/2;
+                        stopX += this.sizeX/2;
                     }
+
+                    if (attacker.y%2 == 0){
+                        stopX -= this.sizeX/2;
+                    }
+
+                    var timeout = Math.ceil(Math.hypot(stopX - startX, stopY - startY)/3);
 
                     var directionX = (stopX - startX) / timeout;
                     var directionY = (stopY - startY)/timeout;
@@ -376,14 +381,16 @@
                 this.cursorY = event.pageY;
             },
             calculateStats: function () {
-                for (var i = 0; i < this.map.length; i++) {
-                    var unitPack = this.map[i];
+                if (this.map != undefined) {
+                    for (var i = 0; i < this.map.length; i++) {
+                        var unitPack = this.map[i];
 
-                    if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
-                        unitPack.unit.calculateStats();
+                        if (unitPack.unit != undefined && unitPack.unit.party != undefined) {
+                            unitPack.unit.calculateStats();
 
-                        if (unitPack.unit.rangeAttack) {
-                            unitPack.unit.calculateRange(this.map);
+                            if (unitPack.unit.rangeAttack) {
+                                unitPack.unit.calculateRange(this.map);
+                            }
                         }
                     }
                 }

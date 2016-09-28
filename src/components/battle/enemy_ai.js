@@ -72,6 +72,35 @@ export default {
                 data:data,
             };
         },
+
+        findUnitToShoot: function (activeHex) {
+            var bestHealth = Infinity;
+            var bestOption = undefined;
+            var data = undefined;
+
+            for (var i = 0; i < this.map.length; i++) {
+                var hex = this.map[i];
+
+                if (hex.unit != undefined && hex.unit.party == 'player') {
+                    for (var j = 0; j < activeHex.unit.inRange.length; j++) {
+                        var unitInRange = activeHex.unit.inRange[j];
+
+                        if (unitInRange.unit == hex.unit){
+                            if (unitInRange.unit.health <= bestHealth){
+                                bestHealth = unitInRange.unit.health;
+                                bestOption = 'attack';
+                                data = hex;
+                            }
+                        }
+                    }
+                }
+            }
+            return {
+                health:bestHealth,
+                option:bestOption,
+                data:data,
+            };
+        },
         tickEnemyHex: function (hex) {
             var that = this;
 
@@ -82,7 +111,15 @@ export default {
                 parity = 'odd';
             }
 
+
             var action = this.findDirectionToNearestOwn(hex.can, hex);
+
+            if (hex.unit.rangeAttack) {
+                var shoot = this.findUnitToShoot(hex);
+                if (shoot.data != undefined){
+                    action = shoot;
+                }
+            }
 
             if (action.option == 'move'){
                 let nextX = directions[action.direction][parity].x;

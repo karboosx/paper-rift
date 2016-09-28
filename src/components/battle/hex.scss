@@ -4,7 +4,7 @@
   transition: 0.6s opacity ease-in;
   pointer-events: none;
 
-  &.used{
+  .used{
     opacity: 0.4;
   }
 }
@@ -15,6 +15,7 @@
   position: relative;
   top: 0px;
   transition: 0.3s all linear;
+  //pointer-events: none;
 
   &.cavalry{
     background-image: url("../../assets/images/units/cavalry.png");
@@ -47,7 +48,7 @@
   &.archer{
     background-image: url("../../assets/images/units/archer.png");
     &.active{
-      background-image: url("../../assets/images/units/archer.png");
+      background-image: url("../../assets/images/units/archer_active.png");
     }
   }
 
@@ -72,6 +73,7 @@
   background-size: cover;
   position: absolute;
   pointer-events: none;
+  z-index: 1;
 
   &.move{
     background-image: url("../../assets/images/gui/arrows_move.png");
@@ -185,5 +187,76 @@
   height: 100px;
   position: absolute;
   background: url('../../assets/images/gui/arrows.png') left center;
-  animation: arrow_play .3s steps(4) infinite;
+  animation: arrow_play 1s steps(4) infinite;
+}
+
+
+.adhesion_hex{
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 10000;
+  display: flex;
+  justify-content: flex-end;
+  //&.rock{
+  //  //background-image: url("../../assets/images/gui/hex_rock.png");
+  //  left: 61px;
+  //  top:-0px;
+  //}
+  //
+  //&.forest{
+  //  //background-image: url("../../assets/images/gui/hex_forest.png");
+  //  left: 81px;
+  //  top:0px;
+  //}
+}
+
+.health{
+  position: absolute;
+  background: url("../../assets/images/gui/heart_bg.png");
+  width: 40px;
+  height: 37px;
+  display: flex;
+  opacity: 0;
+  justify-content: flex-end;
+  z-index: 1000;
+  transition: 0.2s opacity ease-in;
+
+  .heart{
+    background: url("../../assets/images/gui/heart.png");
+    width: 40px;
+    height: 37px;
+    position: absolute;
+    left: 0;
+  }
+
+  .text{
+    width: 40px;
+    height: 37px;
+    position: absolute;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+  }
+}
+
+.hex_inner:hover{
+  .health{
+    opacity: 1;
+  }
+}
+
+.onHover{
+  opacity: 0;
+  transition: 0.2s opacity ease-in;
+}
+
+.hex_inner:hover{
+  .onHover{
+    opacity: 1;
+  }
 }

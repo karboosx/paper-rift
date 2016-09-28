@@ -1,6 +1,7 @@
 <template>
-    <div :style="{top:unit.top+'px',left:unit.left+'px',transform:'rotate('+unit.rotation+'deg)'}" :class="{used:unit.ap == 0}" class="hex_image">
-        <div v-if="selected && unit.movable && !unit.moving" v-show="playerTurn" transition="opacity2">
+    <div :style="{top:unit.top+'px',left:unit.left+'px',transform:'rotate('+unit.rotation+'deg)'}" class="hex_image">
+
+        <div v-if="selected && unit.movable && !unit.moving" v-show="playerTurn" transition="opacity2" :class="{used:unit.ap == 0}">
             <div class="move_arrow move leftup" v-if="can.leftup == 'move'"></div>
             <div class="move_arrow move rightup" v-if="can.rightup == 'move'"></div>
             <div class="move_arrow move leftdown" v-if="can.leftdown == 'move'"></div>
@@ -17,18 +18,30 @@
 
         </div>
 
-        <div :style="{top:unit.arrowTop+'px',left:unit.arrowLeft+'px'}" class="arrow_animation" v-if="unit != undefined && unit.showArrow"></div>
+        <div class="adhesion_hex onHover">
+            <div v-if="adhesion.forest && !unit.moving" class="icon icon small forest"></div>
+            <div v-if="adhesion.rock && !unit.moving" class="icon icon small rock"></div>
+        </div>
 
-        <div :class="{active:selected}" class="unit cavalry" v-if="unit.type == 'cavalry'"></div>
-        <div :class="{active:selected}" class="unit axemen" v-if="unit.type == 'axemen'"></div>
-        <div :class="{active:selected}" class="unit king" v-if="unit.type == 'king'"></div>
-        <div :class="{active:selected}" class="unit swordman" v-if="unit.type == 'swordman'"></div>
-        <div :class="{active:selected}" class="unit archer" v-if="unit.type == 'archer'"></div>
+        <div class="health" v-if="unit != undefined && unit.party != undefined">
+            <div class="heart" :style="{width:health+'px'}"></div>
+            <div class="text">{{ unit.health }}</div>
+        </div>
 
-        <div class="unit rock" v-if="unit.type == 'rock'"></div>
-        <div class="unit forest" v-if="unit.type == 'forest'"></div>
+        <div :class="{used:unit.ap == 0}">
+            <div :style="{top:unit.arrowTop+'px',left:unit.arrowLeft+'px'}" class="arrow_animation" v-if="unit != undefined && unit.showArrow"></div>
 
-        <div v-if="inRange" class="inRange" transition="opacity"></div>
+            <div :class="{active:selected}" class="unit cavalry" v-if="unit.type == 'cavalry'"></div>
+            <div :class="{active:selected}" class="unit axemen" v-if="unit.type == 'axemen'"></div>
+            <div :class="{active:selected}" class="unit king" v-if="unit.type == 'king'"></div>
+            <div :class="{active:selected}" class="unit swordman" v-if="unit.type == 'swordman'"></div>
+            <div :class="{active:selected}" class="unit archer" v-if="unit.type == 'archer'"></div>
+
+            <div class="unit rock" v-if="unit.type == 'rock'"></div>
+            <div class="unit forest" v-if="unit.type == 'forest'"></div>
+
+        </div>
+        <div v-if="inRange && playerTurn" class="inRange" transition="opacity"></div>
 
         <div v-if="animation.plusAp" class="animation plusAp" transition="opacity"></div>
         <div v-if="animation.damage" class="animation damage" transition="opacity">
@@ -64,6 +77,14 @@
             }
         },
         computed:{
+            health: function () {
+                if (this.unit != undefined && this.unit.party != undefined) {
+                    return (this.unit.health/this.unit.maxHealth) * 40;
+                }else{
+                    return 0;
+                }
+
+            },
             inRange: function () {
                 if (this.range != undefined) {
                     for (var i = 0; i < this.range.length; i++) {
