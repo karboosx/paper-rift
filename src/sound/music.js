@@ -7,6 +7,7 @@ var musics = {
     },
     battle: {
         src:[require('../assets/music/curse_of_the_scarab.mp3')],
+        volume:0.4,
         loop:true
     },
 };

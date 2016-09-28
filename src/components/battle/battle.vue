@@ -79,6 +79,7 @@
     import EnemyAI from './enemy_ai'
     import Unit from './unit'
     import {bonus} from './unit'
+    import SoundManager from '../../sound/manager'
 
     export default {
         mixins:[EnemyAI],
@@ -186,6 +187,8 @@
 
                     unit.showArrow = true;
 
+                    SoundManager.playSound('arrow_shoot');
+
                     newAnimation = setInterval(function () {
 
                         unit.arrowLeft = (directionX)*newAnimationTick;
@@ -195,6 +198,8 @@
 
                         if (newAnimationTick > timeout) {
                             clearInterval(newAnimation);
+
+                            SoundManager.playSound('arrow_hit');
                             attacker.attackUnit(defender, 'range');
                             defender.defendUnit(attacker, 'range');
 
@@ -206,6 +211,8 @@
                         }
                     }, 9);
                 }else {
+
+                    SoundManager.playSound('sword_attack');
                     attacker.attackUnit(defender);
                     defender.defendUnit(attacker);
 
@@ -320,6 +327,9 @@
                 var newAnimationTick = 0;
 
                 unit.moving = true;
+
+                SoundManager.playSound('foot_steps');
+
                 newAnimation = setInterval(function () {
                     var timeout = 100;
                     if (unit.y == y && unit.x < x){

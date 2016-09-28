@@ -1,3 +1,5 @@
+import SoundManager from '../../sound/manager'
+
 export var units = {
     king: {
         hp: 50,
@@ -181,8 +183,10 @@ export default function Unit() {
             if (target.health <= 0) {
                 setTimeout(function () {
                     target.setPos(-1,-1);
+                    SoundManager.playSound('unit_death')
                 },100);
                 target.health = 0;
+
             }
         }
 
