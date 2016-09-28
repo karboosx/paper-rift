@@ -1,15 +1,15 @@
 <template>
     <div @mousemove="moveCursor">
-        <div class="finish win" v-if="win">
+        <div class="finish win" v-if="win" transition="opacity">
             <div>
                 <div class="text">You win!</div>
-                <div class="link" v-link="{name:'camp'}">Back to camp</div>
+                <a class="link" v-link="{name:'camp'}">Back to camp</a>
             </div>
         </div>
-        <div class="finish lose" v-if="lose">
+        <div class="finish lose" v-if="lose" transition="opacity">
             <div>
                 <div class="text">You lose!</div>
-                <div class="link" v-link="{name:'camp'}">Back to menu</div>
+                <a class="link" v-link="{name:'index'}">Back to menu</a>
             </div>
         </div>
 
@@ -531,10 +531,10 @@
                             unit.unitType = 'enemy';
                         }
 
-                        if (unit.unit != undefined && unit.unit instanceof Unit && unit.unit.health<=0){
-                            unit.unit = undefined;
-                            unit.unitType = undefined;
-                        }
+//                        if (unit.unit != undefined && unit.unit instanceof Unit && unit.unit.health<=0){
+//                            unit.unit = undefined;
+//                            unit.unitType = undefined;
+//                        }
                         map.push(unit);
                     }
                 }
@@ -633,6 +633,18 @@
             }
         },
         watch:{
+            win: function () {
+                setTimeout(function () {
+                    SoundManager.playSound('win')
+                }, 500);
+
+            },
+            lose: function () {
+                setTimeout(function () {
+                    SoundManager.playSound('lose')
+                }, 500);
+
+            },
             map:function(){
                 this.calculateStats();
             },
