@@ -1,7 +1,7 @@
 <template>
     <div :style="{top:unit.top+'px',left:unit.left+'px',transform:'rotate('+unit.rotation+'deg)'}" class="hex_image">
 
-        <div v-if="selected && unit.movable && !unit.moving" v-show="playerTurn" transition="opacity2" :class="{used:unit.ap == 0}">
+        <div v-if="selected && unit.movable && !unit.moving" v-show="playerTurn" transition_off="opacity2" :class="{used:unit.ap == 0}">
             <div class="move_arrow move leftup" v-if="can.leftup == 'move'"></div>
             <div class="move_arrow move rightup" v-if="can.rightup == 'move'"></div>
             <div class="move_arrow move leftdown" v-if="can.leftdown == 'move'"></div>
@@ -41,15 +41,15 @@
             <div class="unit forest" v-if="unit.type == 'forest'"></div>
 
         </div>
-        <div v-if="inRange && playerTurn" class="inRange" transition="opacity"></div>
+        <div v-if="inRange && playerTurn" class="inRange" transition_off="opacity"></div>
 
-        <div v-if="animation.plusAp" class="animation plusAp" transition="opacity"></div>
-        <div v-if="animation.damage" class="animation damage" transition="opacity">
+        <div v-if="animation.plusAp" class="animation plusAp" transition_off="opacity"></div>
+        <div v-if="animation.damage" class="animation damage" transition_off="opacity">
             <div class="animation_info">
                 {{ animation.info }}
             </div>
         </div>
-        <div v-if="animation.dodge" class="animation dodge" transition="opacity">
+        <div v-if="animation.dodge" class="animation dodge" transition_off="opacity">
             <div class="animation_info">
                 MISS
             </div>

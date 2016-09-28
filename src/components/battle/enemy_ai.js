@@ -12,15 +12,18 @@ export default {
     methods:{
         tickAvailableEnemy: function () {
             var that = this;
-            for (var i = 0; i < this.map.length; i++) {
-                let hex = this.map[i];
 
-                if (hex.unit != undefined && hex.unit.party == 'enemy') {
-                    if (hex.unit.ap > 0) {
-                        setTimeout(function () {
-                            that.tickEnemyHex(hex);
-                        },50);
-                        return true;
+            if (this.map != undefined) {
+                for (var i = 0; i < this.map.length; i++) {
+                    let hex = this.map[i];
+
+                    if (hex.unit != undefined && hex.unit.party == 'enemy') {
+                        if (hex.unit.ap > 0 && hex.x != -1 && hex.y != -1) {
+                            setTimeout(function () {
+                                that.tickEnemyHex(hex);
+                            }, 50);
+                            return true;
+                        }
                     }
                 }
             }
@@ -126,12 +129,12 @@ export default {
                 let nextY = directions[action.direction][parity].y;
 
                 this.makeUnitMove(hex.unit, hex.unit.x+nextX,hex.unit.y+nextY, function () {
-                    that.tickAvailableEnemy();
+                    return that.tickAvailableEnemy();
                 })
 
             }else if (action.option == 'attack'){
                 this.makeUnitAttack(hex.unit, action.data.unit, function () {
-                    that.tickAvailableEnemy();
+                    return that.tickAvailableEnemy();
                 })
             }
 

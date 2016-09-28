@@ -481,6 +481,10 @@
                             unit.unitType = 'enemy';
                         }
 
+                        if (unit.unit != undefined && unit.unit instanceof Unit && unit.unit.health<=0){
+                            unit.unit = undefined;
+                            unit.unitType = undefined;
+                        }
                         map.push(unit);
                     }
                 }

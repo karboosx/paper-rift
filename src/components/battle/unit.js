@@ -40,7 +40,7 @@ export var units = {
         name: 'Axeman'
     },
     archer: {
-        hp: 20,
+        hp: 1,
         attack: 4,
         defence: 0,
         speed: 10,
