@@ -6,41 +6,59 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &.full{
+    min-height: 100vh;
+  }
 }
 
 .tent{
   width: 200px;
   height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  font-size: 12px;
-  color: white;
 
-  text-shadow: 0 0 3px #000;
+  .image{
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 12px;
+    color: white;
 
-  &.lvl1{
-    background-image: url("../../assets/images/camp/tent_lvl_1.png");
-  }
-  &.lvl2{
-    background-image: url("../../assets/images/camp/tent_lvl_2.png");
-  }
-  &.lvl3{
-    background-image: url("../../assets/images/camp/tent_lvl_3.png");
-  }
-  &.lvl4{
-    background-image: url("../../assets/images/camp/tent_lvl_4.png");
-  }
-  &.king{
-    background-image: url("../../assets/images/camp/tent_king.png");
+    text-shadow: 0 0 3px #000;
+    &.lvl1{
+      background-image: url("../../assets/images/camp/tent_lvl_1.png");
+    }
+    &.lvl2{
+      background-image: url("../../assets/images/camp/tent_lvl_2.png");
+    }
+    &.lvl3{
+      background-image: url("../../assets/images/camp/tent_lvl_3.png");
+    }
+    &.lvl4{
+      background-image: url("../../assets/images/camp/tent_lvl_4.png");
+    }
+    &.lvl5{
+      background-image: url("../../assets/images/camp/tent_king.png");
+    }
   }
 
+  background: none;
+
+  &:hover{
+    background: url("../../assets/images/camp/select.png");
+    cursor: pointer;
+  }
+
+  .text{
+    margin-bottom: 7px;
+  }
 }
 
 .wall{
-
+  height: 100vh;
   border: 66.6666667px solid transparent;
+  border-top-width: 0;
+  border-bottom-width: 0;
   border-image: url(../../assets/images/camp/wall.png) 70 fill repeat;
-
 
 }

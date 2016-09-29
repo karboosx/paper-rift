@@ -46,6 +46,9 @@ export default {
                         if (hex != targetHex) {
                             grid.setWalkableAt(hex.x, hex.y, false);
                         }
+                        if (hex.unit.party == activeHex.unit.party) {
+                            grid.setWalkableAt(hex.x, hex.y, true);
+                        }
                     }
                 }
 

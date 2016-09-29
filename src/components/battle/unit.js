@@ -69,10 +69,15 @@ export default function Unit() {
     this.arrowTop = 0;
     this.showArrow = false;
 
+    this.tent_x = undefined;
+    this.tent_y = undefined;
+    this.level = 1;
+
     this.rotation = 0;
     this.top = 0;
     this.movable = true;
     this.moving = false;
+
 
     this.health = 10;
     this.maxHealth = 10;
@@ -100,6 +105,18 @@ export default function Unit() {
     this.setPos = function (x, y) {
         this.x = x;
         this.y = y;
+
+        return this;
+    }
+    this.setLevel = function (level) {
+        this.level = level;
+
+        return this;
+    }
+
+    this.setTentPos = function (x, y) {
+        this.tent_x = x;
+        this.tent_y = y;
 
         return this;
     }
