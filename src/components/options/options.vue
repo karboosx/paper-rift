@@ -3,6 +3,8 @@
         <div class="options">
             <div class="gui basic hover two center" v-if="!music_mute" @click="mute">Music ON</div>
             <div class="gui basic hover two center" v-if="music_mute" @click="unmute">Music OFF</div>
+
+            <a class="gui basic hover two center" v-link="{name:'index', replace:true}">Main Menu</a>
         </div>
     </div>
 </template>

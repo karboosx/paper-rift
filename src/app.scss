@@ -10,7 +10,8 @@ body{
 }
 
 .gui{
-
+  display: block;
+  text-decoration: none;
 
   &.center{
     text-align: center;

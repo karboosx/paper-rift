@@ -20,7 +20,7 @@
         </div>
 
         <div class="container">
-            <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map" id="map">
+            <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map mud" id="map">
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{hover:playerTurn,selected:(hex.unit == selectedUnit && hex.unit != undefined && playerTurn), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
@@ -94,10 +94,11 @@
     import Unit from './unit'
     import {bonus} from './unit'
     import SoundManager from '../../sound/manager'
-    import Options from '../options/options.vue'
+    import OptionsMixin from '../../mixins/options'
+    import Options from '../../components/options/options.vue'
 
     export default {
-        mixins:[EnemyAI],
+        mixins:[EnemyAI, OptionsMixin],
         name:'battle',
         props:['x','y', 'own','enemy','obstacles'],
         data: function () {
@@ -125,9 +126,6 @@
             Hex, Options
         },
         methods:{
-            showOptions: function () {
-                this.isOptionsShow = !this.isOptionsShow;
-            },
             canJump: function (unit, x,y) {
                 if (Math.abs(unit.x-x)>1 || Math.abs(unit.y-y)>1){
                     return false;
@@ -642,12 +640,14 @@
         },
         watch:{
             win: function () {
+                this.selectedUnit = undefined;
                 setTimeout(function () {
                     SoundManager.playSound('win')
                 }, 500);
 
             },
             lose: function () {
+                this.selectedUnit = undefined;
                 setTimeout(function () {
                     SoundManager.playSound('lose')
                 }, 500);
@@ -666,7 +666,7 @@
                 }
             },
             cursor_on_left: function (val) {
-                if (val)
+                if (val && this.selectedUnit != undefined)
                 SoundManager.playSound('whoosh');
             }
         },

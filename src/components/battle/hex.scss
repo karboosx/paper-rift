@@ -69,6 +69,17 @@
 
 }
 
+.map{
+  &.lava{
+    .unit.rock{
+      background-image: url("../../assets/images/units/lava_rock.png");
+    }
+    .unit.forest{
+      background-image: url("../../assets/images/units/lava_forest.png");
+    }
+  }
+}
+
 .move_arrow{
   background-size: cover;
   position: absolute;

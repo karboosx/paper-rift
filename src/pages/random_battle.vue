@@ -67,11 +67,9 @@
                     new Unit().setPos(0,5).setType('archer').setParty('player'),
                 ],
                 enemy:[
-                    new Unit().setPos(3,2).setType('archer').setParty('enemy').setMovable(false),
-
-                    new Unit().setPos(x-1,1).setType('archer').setParty('enemy').setMovable(false),
-                    new Unit().setPos(x-1,2).setType('archer').setParty('enemy').setMovable(false),
-                    new Unit().setPos(x-1,3).setType('archer').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,5).setType('cavalry').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,2).setType('cavalry').setParty('enemy').setMovable(false),
+                    new Unit().setPos(x-1,3).setType('cavalry').setParty('enemy').setMovable(false),
                     new Unit().setPos(x-1,4).setType('king').setParty('enemy').setMovable(false),
 
 //                    new Unit().setPos(8,3).setType('king').setParty('enemy').setMovable(false),

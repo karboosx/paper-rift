@@ -1,4 +1,6 @@
 import SoundManager from '../../sound/manager'
+import PF from 'pathfinding'
+
 var directions = {
     left:{even:{x:-1, y:0},odd:{x:-1, y:0}},
     right:{even:{x:1, y:0},odd:{x:1, y:0}},
@@ -7,7 +9,6 @@ var directions = {
     rightdown:{even:{x:1, y:1},odd:{x:0, y:1}},
     leftdown:{even:{x:0, y:1},odd:{x:-1, y:1}},
 };
-
 
 export default {
     methods:{
@@ -33,6 +34,40 @@ export default {
             this.nextEnemyTurnEnd();
         },
 
+        findPathToHex: function (activeHex, targetHex, nextX, nextY) {
+            console.log(activeHex, targetHex, nextX, nextY)
+            if (activeHex.x+nextX>=0 && activeHex.y+nextY>=0 && activeHex.x+nextX<=this.x-1 && activeHex.y+nextY<=this.y-1 && this.map != undefined) {
+                var grid = new PF.Grid(this.x, this.y);
+
+                for (var i = 0; i < this.map.length; i++) {
+                    var hex = this.map[i];
+
+                    if (hex.unit != undefined && hex.unit.type != undefined && hex.x >= 0 && hex.y >= 0) {
+                        if (hex != targetHex) {
+                            grid.setWalkableAt(hex.x, hex.y, false);
+                        }
+                    }
+                }
+
+                var finder = new PF.AStarFinder({
+                });
+
+                //console.info(grid);
+                //console.log(activeHex.x+nextX, activeHex.y+nextY, targetHex.x, targetHex.y);
+                var path = finder.findPath(activeHex.x+nextX, activeHex.y+nextY, targetHex.x, targetHex.y, grid);
+
+                this.path = path;
+
+                if (path.length>0) {
+                    return {
+                        path: path, length: path.length
+                    }
+                }
+            }
+            return {
+                path:[], length:Infinity
+            }
+        },
         findDirectionToNearestOwn: function (can, activeHex) {
             var bestLength = Infinity;
             var bestDirection = undefined;
@@ -54,8 +89,14 @@ export default {
                             var nextX = directions[direction][parity].x;
                             var nextY = directions[direction][parity].y;
 
-                            var newLength = hex.unit.distance(activeHex.x+nextX, activeHex.y+nextY);
-                            if (newLength<bestLength){
+
+                            var newPath = this.findPathToHex(activeHex, hex, nextX, nextY);
+                            var newLength = newPath.length;
+
+                            //var newLength = hex.unit.distance(activeHex.x+nextX, activeHex.y+nextY);
+
+                                //console.log(newLength);
+                            if (newLength<=bestLength){
                                 bestLength = newLength;
                                 bestDirection = direction;
                                 if (activeHex.can[direction] == 'own'){
@@ -119,6 +160,7 @@ export default {
 
             var action = this.findDirectionToNearestOwn(hex.can, hex);
 
+            console.log(action)
             if (hex.unit.rangeAttack) {
                 var shoot = this.findUnitToShoot(hex);
                 if (shoot.data != undefined){
@@ -139,6 +181,7 @@ export default {
                     return that.tickAvailableEnemy();
                 })
             }else{
+                hex.unit.ap --;
                 that.tickAvailableEnemy();
             }
 
