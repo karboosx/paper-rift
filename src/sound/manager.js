@@ -8,5 +8,11 @@ export default {
     },
     playSound: function (musicName) {
         Sound.play(musicName);
+    },
+    muteMusic: function () {
+        Music.mute();
+    },
+    unmuteMusic: function () {
+        Music.unmute();
     }
 }

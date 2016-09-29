@@ -3,7 +3,7 @@ import {
 
 } from './mutations_type'
 
-
+import Options from './modules/options'
 /*
  Global state
  */
@@ -20,7 +20,7 @@ const mutations = {}
  */
 
 var modules = {
-
+    Options
 }
 
 import Vue from 'vue'

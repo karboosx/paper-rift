@@ -1,3 +1,4 @@
+import SoundManager from '../../sound/manager'
 var directions = {
     left:{even:{x:-1, y:0},odd:{x:-1, y:0}},
     right:{even:{x:1, y:0},odd:{x:1, y:0}},
@@ -155,6 +156,8 @@ export default {
             }
 
             this.playerTurn = true;
+
+            SoundManager.playSound('turn')
         },
     }
 }

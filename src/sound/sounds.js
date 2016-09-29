@@ -22,6 +22,15 @@ var sounds = {
     lose: {
         src:[require('../assets/sounds/178875__rocotilos__you-lose-evil.mp3')],
     },
+    turn: {
+        src:[require('../assets/sounds/318687__ramsamba__typewriter-bell.mp3')],
+    },
+    whoosh: {
+        src:[require('../assets/sounds/350504__spennnyyy__whoosh-there-it-is.mp3')],
+    },
+    whoosh_start: {
+        src:[require('../assets/sounds/216675__hitrison__stick-swoosh-whoosh.mp3')],
+    },
 
 
 };

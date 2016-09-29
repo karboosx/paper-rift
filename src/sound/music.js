@@ -28,6 +28,16 @@ var manager = {
     play: function (music) {
         this.stopAllMusic();
         musicHowlers[music].play();
+    },
+    mute: function () {
+        for (let musicName in musicHowlers) {
+            musicHowlers[musicName].mute(true)
+        }
+    },
+    unmute: function () {
+        for (let musicName in musicHowlers) {
+            musicHowlers[musicName].mute(false)
+        }
     }
 }
 export default manager;

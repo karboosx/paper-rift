@@ -30,7 +30,7 @@
 
             </div>
 
-            <div class="info" :class="{left:cursor_on_left}" transition="movein" v-if="selectedUnit != undefined" v-show="playerTurn">
+            <div class="info" :class="{left:cursor_on_left}" v-if="selectedUnit != undefined && playerTurn">
 
                 <div class="unit_image" :class="[selectedUnit.type]"></div>
 
@@ -82,6 +82,7 @@
             </div>
         </div>
     </div>
+    <options v-if="isOptionsShow"></options>
 </template>
 
 <script type="text/babel">
@@ -93,6 +94,7 @@
     import Unit from './unit'
     import {bonus} from './unit'
     import SoundManager from '../../sound/manager'
+    import Options from '../options/options.vue'
 
     export default {
         mixins:[EnemyAI],
@@ -100,6 +102,7 @@
         props:['x','y', 'own','enemy','obstacles'],
         data: function () {
             return {
+                isOptionsShow:false,
                 playerTurn:true,
                 showMyTurn:false,
                 startIntro:false,
@@ -119,9 +122,12 @@
             }
         },
         components: {
-            Hex
+            Hex, Options
         },
         methods:{
+            showOptions: function () {
+                this.isOptionsShow = !this.isOptionsShow;
+            },
             canJump: function (unit, x,y) {
                 if (Math.abs(unit.x-x)>1 || Math.abs(unit.y-y)>1){
                     return false;
@@ -143,8 +149,10 @@
                 this.nextEnemyTurnStart();
             },
             nextTurn: function () {
-                this.nextOwnTurn();
-                this.nextEnemyTurn();
+                if (this.playerTurn) {
+                    this.nextOwnTurn();
+                    this.nextEnemyTurn();
+                }
             },
             inRange: function (attacker, target) {
 //                attacker.calculateRange();
@@ -222,7 +230,7 @@
                             unit.moving = false;
                             callback(unit, this);
                         }
-                    }, 9);
+                    }, 5);
                 }else {
 
                     SoundManager.playSound('sword_attack');
@@ -656,10 +664,23 @@
                         that.showMyTurn = false;
                     }, 1500);
                 }
+            },
+            cursor_on_left: function (val) {
+                if (val)
+                SoundManager.playSound('whoosh');
             }
         },
         vuex: {
             getters: {
+            }
+        },
+        events: {
+            keyup: function (code) {
+                if (code == 27){
+                    this.showOptions();
+                }else if (code == 32){
+                    this.nextTurn();
+                }
             }
         },
         created: function () {
@@ -684,7 +705,7 @@
                     containment: [-leftMax ,-topMax, 0,topMin]
                 });
                 that.startIntro = true;
-
+                SoundManager.playSound('whoosh_start');
                 setTimeout(function () {
                     that.startIntro = false;
                 }, 1500);
@@ -695,4 +716,4 @@
     }
 </script>
 
-<style lang="scss" src="./battle.scss"></style>
+<style scoped lang="scss" src="./battle.scss"></style>

@@ -69,14 +69,14 @@
 
 .info{
   position: fixed;
-  bottom: 0;
+  bottom: -42px;
+  right: -11px;
   display: flex;
   justify-content: flex-end;
   z-index: 100000000;
   pointer-events: none;
   width: 100vw;
-
-  transition:1s bottom, opacity, right ease-in;
+  transition:0.1s all ease-in;
 
   &.left{
     bottom: -210px;

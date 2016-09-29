@@ -139,4 +139,4 @@
     }
 </script>
 
-<style lang="scss" src="./hex.scss"></style>
+<style scoped lang="scss" src="./hex.scss"></style>

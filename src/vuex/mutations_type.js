@@ -4,5 +4,4 @@
 
  */
 
-/* MUSIC PLAYER */
-//export const MUSICPLAYER_POSITION = 'MUSICPLAYER_POSITION';
+export const MUSIC_MUTE = 'MUSIC_MUTE';

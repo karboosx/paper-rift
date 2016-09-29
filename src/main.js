@@ -7,6 +7,8 @@ import store from './vuex/store'
 import routes from './routes'
 import config from './config'
 import SoundManager from './sound/manager'
+import actions from './vuex/actions'
+import getters from './vuex/getters'
 
 require('./app.scss')
 
@@ -19,9 +21,35 @@ var App = Vue.extend({
     store,
     components: {
     },
+    vuex:{
+        actions:{
+            mute_music: actions.mute_music,
+            unmute_music: actions.unmute_music,
+        },
+        getters: {
+            music_mute: getters.music_mute,
+        }
+    },
     ready: function () {
         $('.loading').remove();
         $('#app').show();
+    },
+    methods:{
+        keyup: function (event) {
+            this.$broadcast('keyup', event.keyCode);
+        },
+        loadOptions: function () {
+            var muteMusic = localStorage.getItem('MUSIC_MUTE');
+            if (muteMusic){
+                this.mute_music();
+            }else{
+                this.unmute_music();
+            }
+        }
+    },
+    created: function () {
+        window.addEventListener('keyup', this.keyup);
+        this.loadOptions();
     }
 })
 Vue.use(VueRouter)
