@@ -177,3 +177,45 @@ body{
   opacity: 0;
   top:-100px;
 }
+
+.map{
+
+  background: url("./assets/images/gui/grass.png");
+  position: absolute;
+  top:18px;
+  left:0px;
+  min-width: 100vw;
+  min-height: 100vh;
+
+  &.mud{
+    background: url("./assets/images/gui/mud.png");
+    .hex_inner{
+      background-image: url("./assets/images/gui/hex_mud.png");
+    }
+  }
+
+  &.lava{
+    background: url("./assets/images/gui/lava.png");
+    .hex_inner{
+      background-image: url("./assets/images/gui/hex_bright.png");
+    }
+  }
+
+}
+
+.ornament{
+  width: 100vw;
+  height: 48px;
+  pointer-events: none;
+  z-index: 1000;
+  background: url("./assets/images/gui/wood.png") repeat-x;
+
+  &.top{
+    position: fixed;
+    top: -13px;
+  }
+  &.bottom{
+    position: fixed;
+    bottom: -23px;
+  }
+}

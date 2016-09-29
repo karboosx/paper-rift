@@ -20,7 +20,7 @@
         </div>
 
         <div class="container">
-            <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map mud" id="map">
+            <div :style="{width:((x*1+0.5)*sizeX)+'px', height:((y*1.05)*sizeY)+'px'}" class="map" :class="[mapType]" id="map">
 
                 <div class="hex" v-for="hex in map" :class="[hex.unitType]" :style="{top:hex.top+'px'}" @click="selectHex(hex.x,hex.y, hex.unit)">
                     <div class="hex_inner" :class="{hover:playerTurn,selected:(hex.unit == selectedUnit && hex.unit != undefined && playerTurn), moving:(hex.unit != undefined && hex.unit.moving)}" :style="{left:hex.left+'px'}">
@@ -100,7 +100,7 @@
     export default {
         mixins:[EnemyAI, OptionsMixin],
         name:'battle',
-        props:['x','y', 'own','enemy','obstacles'],
+        props:['x','y', 'own','enemy','obstacles','mapType'],
         data: function () {
             return {
                 isOptionsShow:false,

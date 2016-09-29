@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <div class="menu" id="menu">
-            <div class="gui basic two hover center">Start New Game</div>
+            <div v-link="{name:'camp'}" class="gui basic two hover center">Start New Game</div>
             <div v-link="{name:'random_battle'}" class="gui basic three hover center">Random Battle</div>
             <div class="gui basic two hover center" @click="showOptions">Options</div>
         </div>

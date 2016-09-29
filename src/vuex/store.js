@@ -4,6 +4,7 @@ import {
 } from './mutations_type'
 
 import Options from './modules/options'
+import Campaign from './modules/campaign'
 /*
  Global state
  */
@@ -20,7 +21,7 @@ const mutations = {}
  */
 
 var modules = {
-    Options
+    Options, Campaign
 }
 
 import Vue from 'vue'

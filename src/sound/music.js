@@ -10,6 +10,11 @@ var musics = {
         volume:0.4,
         loop:true
     },
+    camp: {
+        src:[require('../assets/music/enchanted_valley.mp3')],
+        volume:0.4,
+        loop:true
+    },
 };
 
 var musicHowlers = {};

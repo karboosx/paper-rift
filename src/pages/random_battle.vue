@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <battle :x="x" :y="y" :own="own" :enemy="enemy" :obstacles="obstacles"></battle>
+        <battle :x="x" :y="y" :own="own" :enemy="enemy" :obstacles="obstacles" :map-type="mapType"></battle>
     </div>
 </template>
 
@@ -54,9 +54,10 @@
             var x = 12;
             var y = 7;
 
-            var obstacles = makeMap(x, y, 5,4);
-
+            var obstacles = makeMap(x, y, 5,1);
+            var mapTypes = ['grass','mud','lava'];
             return {
+                mapType:mapTypes[Math.round(Math.random()*mapTypes.length)],
                 x:x,
                 y:y,
                 own:[
