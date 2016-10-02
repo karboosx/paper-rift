@@ -22,6 +22,7 @@
     </div>
     <div class="ornament top"></div>
     <div class="ornament bottom"></div>
+    <div class="attack_button" v-link="{name:'random_battle'}"></div>
 
     <build-tent v-if="showBuildTent" :x="buildTentX" :y="buildTentY"></build-tent>
     <manage-tent v-if="manageTent" :tent.sync="tents[manageTentX][manageTentY]"></manage-tent>
@@ -51,6 +52,7 @@
                 buildTentY:undefined,
                 manageTentX:undefined,
                 manageTentY:undefined,
+                clickLock:false,
             }
         },
         components:{
@@ -67,10 +69,12 @@
         },
         methods:{
             selectTentToBuild: function (x, y) {
+                if (this.clickLock) return;
                 this.buildTentX=x;
                 this.buildTentY=y;
             },
             selectTentToManage: function (x, y) {
+                if (this.clickLock) return;
                 this.manageTentX=x;
                 this.manageTentY=y;
                 SoundManager.playRandomTaunt();
@@ -143,7 +147,15 @@
                 if (top > 0) top = 20;
 
                 $('#camp').draggable({
-                    containment: [0 ,top, 0,20]
+                    containment: [0 ,top, 0,20],
+                    start: function () {
+                        that.clickLock = true;
+                    },
+                    stop: function () {
+                        Vue.nextTick(function () {
+                            that.clickLock = false;
+                        })
+                    }
                 })
 
             })

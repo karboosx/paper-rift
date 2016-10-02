@@ -3,6 +3,7 @@ import {Howl} from 'howler'
 var sounds = {
     sword_attack: {
         src:[require('../assets/sounds/52458__audione__sword-01.mp3')],
+        volume:0.5,
     },
     arrow_hit: {
         src:[require('../assets/sounds/349693__drmaysta__arrow-hit.mp3')],

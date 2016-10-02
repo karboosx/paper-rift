@@ -25,7 +25,7 @@
     align-items: flex-end;
     font-size: 12px;
     color: white;
-    cursor: pointer;
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
 
 
     text-shadow: 0 0 3px #000;
@@ -50,7 +50,7 @@
 
   &:hover{
     background: url("../../assets/images/camp/select.png");
-    cursor: pointer;
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
   }
 
   .text{
@@ -65,5 +65,19 @@
   border-top-width: 0;
   border-bottom-width: 0;
   border-image: url(../../assets/images/camp/wall.png) 70 fill repeat;
+}
 
+.attack_button{
+  background-image: url("../../assets/images/gui/attack.png");
+  width:195px;
+  height:200px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: 0.1s all ease-out;
+
+  &:hover{
+    background: url("../../assets/images/gui/attack_hover.png");
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
+  }
 }

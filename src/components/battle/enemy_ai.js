@@ -35,7 +35,6 @@ export default {
         },
 
         findPathToHex: function (activeHex, targetHex, nextX, nextY) {
-            console.log(activeHex, targetHex, nextX, nextY)
             if (activeHex.x+nextX>=0 && activeHex.y+nextY>=0 && activeHex.x+nextX<=this.x-1 && activeHex.y+nextY<=this.y-1 && this.map != undefined) {
                 var grid = new PF.Grid(this.x, this.y);
 
@@ -163,7 +162,6 @@ export default {
 
             var action = this.findDirectionToNearestOwn(hex.can, hex);
 
-            console.log(action)
             if (hex.unit.rangeAttack) {
                 var shoot = this.findUnitToShoot(hex);
                 if (shoot.data != undefined){

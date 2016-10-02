@@ -187,7 +187,7 @@
 
   &:hover{
     background: url("../../assets/images/gui/upgrade_hover.png") no-repeat;
-    cursor: pointer;
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
   }
 
   &.have, &.have:hover{
@@ -390,7 +390,7 @@
 
     &:hover{
       background: url("../../assets/images/gui/build_tent_cancel_hover.png") no-repeat;
-      cursor: pointer;
+      cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
     }
   }
 }
@@ -403,7 +403,7 @@
 
   &:hover{
     background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
-    cursor: pointer;
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
   }
 
   &:disabled{

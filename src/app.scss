@@ -1,7 +1,21 @@
+/* latin */
+@font-face {
+  font-family: 'Gloria Hallelujah';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Gloria Hallelujah'), local('GloriaHallelujah'), url(./assets/font/font.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
 body{
   margin: 0;
   font-family: 'Gloria Hallelujah', cursive;
   overflow: hidden;
+
+}
+
+body *{
+  cursor: url("./assets/images/gui/cursor.png"), auto;
 }
 
 .noselect *{
@@ -12,7 +26,7 @@ body{
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
-  cursor: default;
+
 }
 
 .page{
@@ -37,7 +51,8 @@ body{
 
     &.hover:hover{
       background-image: url("./assets/images/gui/basic_hover.png");
-      cursor: pointer;
+      cursor: url("./assets/images/gui/cursor_pointer.png"), auto;
+
       color: #ffffff;
     }
   }
@@ -51,7 +66,7 @@ body{
 
     &.hover:hover{
       background-image: url("./assets/images/gui/orange_hover.png");
-      cursor: pointer;
+      cursor: url("./assets/images/gui/cursor_pointer.png"), auto;
       color: #0d374c;
     }
   }
@@ -65,7 +80,7 @@ body{
 
     &.hover:hover{
       background-image: url("./assets/images/gui/basic_hover.png");
-      cursor: pointer;
+      cursor: url("./assets/images/gui/cursor_pointer.png"), auto;
       color: #0d374c;
     }
   }
@@ -144,7 +159,7 @@ body{
 
     &:hover{
       background-image: url("./assets/images/gui/next_turn_hover.png");
-      cursor: pointer;
+      cursor: url("./assets/images/gui/cursor_pointer.png"), auto;
     }
   }
 }

@@ -42,7 +42,7 @@
     height: 109px;
     z-index: 100;
     transition: 0.1s all ease-out;
-    cursor: pointer;
+    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
 
     &.moving{
       z-index: 1000;
@@ -167,6 +167,11 @@
   }
 }
 
+.info.left{
+  .unit_image{
+    opacity: 0;
+  }
+}
 .next_turn{
   position: fixed;
   bottom: 0px;
