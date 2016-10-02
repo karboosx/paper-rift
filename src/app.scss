@@ -3,6 +3,18 @@ body{
   font-family: 'Gloria Hallelujah', cursive;
   overflow: hidden;
 }
+
+.noselect *{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+  cursor: default;
+}
+
 .page{
   width: 100vw;
   height: 100vh;
@@ -44,6 +56,20 @@ body{
     }
   }
 
+  &.blue{
+    background-image: url("./assets/images/gui/basic_blue.png");
+    font-size: 24px;
+    color: #1e008e;
+    font-weight: bold;
+    transition: 0.2s all ease-out;
+
+    &.hover:hover{
+      background-image: url("./assets/images/gui/basic_hover.png");
+      cursor: pointer;
+      color: #0d374c;
+    }
+  }
+
   &.one{
     background-position: -17px 519px;
     width: 279px;
@@ -72,6 +98,37 @@ body{
     justify-content: center;
     align-items: center;
     line-height: 56px;
+  }
+  &.five{
+    background-position: -509px -327px;
+    width: 287px;
+    height: 151px;
+    padding: 61px 49px 47px 104px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 56px;
+  }
+  &.six{
+    background-position: -124px -15px;
+    width: 332px;
+    height: 50px;
+    padding: 35px 27px 32px 23px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 56px;
+    color: #001040;
+
+    &.stack{
+      margin-top: -20px;
+    }
+    &.moved{
+      margin-left: 20px;
+    }
+
   }
 
   &.next_turn{

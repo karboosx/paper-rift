@@ -54,6 +54,46 @@ export var units = {
     },
 }
 
+export var conveniences = {
+    lvl1:{
+        groupLiving:-1,
+        smallTent:-1,
+    },
+    lvl2:{
+        personalLiving:1,
+        smallTent:-1,
+        balcon:1,
+    },
+    lvl3:{
+        personalLiving:1,
+        mediumTent:1,
+        balcon:1,
+        toitoi:1,
+    },
+    lvl4:{
+        personalLiving:1,
+        mediumTent:1,
+        balcon:1,
+        toitoi:1,
+    },
+    lvl5:{
+        personalLiving:1,
+        bigTent:2,
+        balcon:1,
+        toitoi:1,
+    },
+}
+export var conveniencesNames = {
+    smallTent:'Small Tent',
+    mediumTent:'Medium Tent',
+    personalLiving:'Personal Quoters',
+    groupLiving:'Group Quoters',
+    bigTent:'Huge Tent',
+    balcon:'Balcon',
+    toitoi:'Privy',
+}
+
+
 export var bonus = {
     forest: {attack:2,defence:0,speed:0},
     rock: {attack:0,defence:2,speed:0}
@@ -201,7 +241,8 @@ export default function Unit() {
             if (target.health <= 0) {
                 setTimeout(function () {
                     target.setPos(-1,-1);
-                    SoundManager.playSound('unit_death')
+                    SoundManager.playRandomDead();
+
                 },100);
                 target.health = 0;
 

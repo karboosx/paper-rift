@@ -329,6 +329,7 @@
                     this.selectedY = undefined;
                     this.selectedUnit = undefined;
                 }else if(unit != undefined && unit.movable){
+                    SoundManager.playRandomTaunt();
                     this.selectedX = unitX;
                     this.selectedY = unitY;
                     this.selectedUnit = unit;

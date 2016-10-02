@@ -1,0 +1,408 @@
+.tent_container{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(53, 27, 4, 0.54);
+}
+
+.actions{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  .full{
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.informations{
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 10000;
+  justify-content: flex-start;
+  letter-spacing: -2px;
+  margin-top: 20px;
+
+  width: 100%;
+  .information{
+    width: 30%;
+    height: 37px;
+  }
+}
+
+.information.float{
+  float: left;
+
+  &.hp{
+    left:0;
+  }
+
+}
+
+.gui.basic.six.hpap{
+  display: flex;
+  justify-content: space-around;
+}
+
+.tent_bg{
+  background: url("../../assets/images/gui/build_tent_bg.png") no-repeat;
+  background-size: cover;
+}
+
+.manage_tent_bg{
+  background: url("../../assets/images/gui/manage_tent.png") no-repeat;
+  background-size: cover;
+  width: 780px;
+  height: 437px;
+  position: absolute;
+  z-index: 10;
+
+  .left{
+    width: 333px;
+    float: left;
+    margin-left: 85px;
+    margin-top: 44px;
+
+    .info{
+      width: 100%;
+      height: 171px;
+      margin-left: 4px;
+    }
+    .stats{
+      width: 100%;
+      height: 149px;
+      margin-top: 50px;
+      margin-left: -8px;
+    }
+  }
+
+  .right{
+    width: 233px;
+    height: 345px;
+    float: left;
+    margin-top: 43px;
+    margin-left: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 10000;
+    justify-content: center;
+
+  }
+
+  .ok{
+    width: 71px;
+    height: 121px;
+    float: left;
+    margin-top: 304px;
+    margin-left: -11px;
+    transform: rotate(20deg);
+    background: url("../../assets/images/gui/manage_tent_ok.png") no-repeat;
+
+    &:hover{
+      background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
+      cursor: pointer;
+    }
+  }
+
+  .center{
+    text-align: center;
+  }
+  .informations {
+    font-size: 26px;
+    color: #dddddd;
+    letter-spacing: 1px;
+    justify-content: center;
+  }
+
+  .input{
+    position: relative;
+    left: -16px;
+    top: -55px;
+  }
+
+  .right{
+
+    .name{
+      margin: 5px;
+      color: wheat;
+    }
+  }
+
+
+  .convenience{
+    margin-top: -64px;
+    height: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    .name{
+      width: 100%;
+      font-size: 18px;
+      color: wheat;
+    }
+    .convenience_name{
+      width: 150px;
+
+      &.green{
+        color: #00db4f;
+      }
+      &.red{
+        color: #ff292f;
+      }
+    }
+  }
+}
+
+.coins{
+  width: 50px;
+  height: 56px;
+  background: url("../../assets/images/gui/coins.png") no-repeat;
+  display: inline-block;
+}
+
+.cost{
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+  color: wheat;
+
+  .amount{
+    font-size: 63px;
+    display: inline-block;
+    line-height: 61px;
+  }
+}
+
+.upgrade{
+  background: url("../../assets/images/gui/upgrade.png") no-repeat;
+  width: 166px;
+  height: 40px;
+  text-align: center;
+  color: wheat;
+  line-height: 40px;
+
+  &:hover{
+    background: url("../../assets/images/gui/upgrade_hover.png") no-repeat;
+    cursor: pointer;
+  }
+
+  &.have, &.have:hover{
+    pointer-events: none;
+    background: url("../../assets/images/gui/upgrade_have.png") no-repeat;
+  }
+
+  &.plus{
+    background: url("../../assets/images/gui/upgrade_plus.png") no-repeat;
+  }
+
+  &.block, &.block:hover{
+    pointer-events: none;
+    background: url("../../assets/images/gui/upgrade_block.png") no-repeat;
+  }
+}
+
+.input{
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.image{
+  position: relative;
+  width: 71px;
+  height: 121px;
+  float: left;
+  z-index: 0;
+  left:-350px;
+  top:-120px;
+
+  .unit_image{
+    width: 190px;
+    height: 250px;
+    z-index: 50;
+    transition: 0.1s all ease-in;
+    transform: rotate(-45deg);
+    &.cavalry{
+      background-image: url("../../assets/images/units/single/cavalry.png");
+    }
+    &.king{
+      background-image: url("../../assets/images/units/single/king.png");
+    }
+    &.axemen{
+      background-image: url("../../assets/images/units/single/axemen.png");
+    }
+    &.swordman{
+      background-image: url("../../assets/images/units/single/swordman.png");
+    }
+    &.archer{
+      background-image: url("../../assets/images/units/single/archer.png");
+    }
+  }
+
+  &.top{
+    left: -220px;
+    top: -300px;
+
+    .unit_image{
+      transform: none;
+    }
+  }
+
+  &.right{
+    left: 220px;
+    top: -26px;
+    .unit_image{
+      transform: rotate(25deg);
+    }
+  }
+
+}
+
+
+.build_tent{
+  background-image: url("../../assets/images/gui/build_tent.png");
+  width: 780px;
+  height: 437px;
+
+  .portrait{
+    height: 132px;
+    width: 172px;
+    position: relative;
+    top: 53px;
+    left: 47px;
+    overflow: hidden;
+
+    .single_all{
+      background: url("../../assets/images/units/single/all.png");
+      width:750px;
+      height:250px;
+      position: relative;
+      top:-20px;
+      transition: 0.2s all ease-out;
+
+      &.archer{
+        background-position: 0px;
+      }
+      &.axemen{
+        background-position: -186px;
+      }
+      &.cavalry{
+        background-position: -369px;
+      }
+      &.swordman{
+        background-position: -536px;
+      }
+
+    }
+  }
+
+  .stats{
+    height: 175px;
+    width: 244px;
+    position: relative;
+    top: 81px;
+    left: 51px;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-wrap: wrap;
+    text-align:center;
+    font-size: 30px;
+    color: wheat;
+    line-height: 46px;
+
+    .information{
+      width: 30%;
+
+      &.big{
+        width: 100%;
+      }
+      &.medium{
+        width: 50%;
+      }
+    }
+  }
+  .name{
+    height: 95px;
+    width: 316px;
+    position: relative;
+    top: -250px;
+    left: 265px;
+    text-align: center;
+    font-size: 45px;
+    color: white;
+  }
+  .cost{
+    height: 165px;
+    width: 196px;
+    position: relative;
+    top: -830px;
+    left: 575px;
+    font-size: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .select{
+    height: 225px;
+    width: 244px;
+    position: relative;
+    top: -235px;
+    left: 411px;
+
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-wrap: wrap;
+
+    .info{
+      color: wheat;
+      font-size: 25px;
+    }
+  }
+
+  .ok{
+    width: 71px;
+    height: 121px;
+    position: relative;
+    top: -330px;
+    left: 670px;
+    transform: rotate(20deg);
+    background: url("../../assets/images/gui/manage_tent_ok.png") no-repeat;
+
+    &:hover{
+      background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
+      cursor: pointer;
+    }
+  }
+
+  .cancel{
+    width: 85px;
+    height: 100px;
+    position: relative;
+    top: -454px;
+    left: 302px;
+    transform: rotate(-20deg);
+    background: url("../../assets/images/gui/build_tent_cancel.png") no-repeat;
+
+    &:hover{
+      background: url("../../assets/images/gui/build_tent_cancel_hover.png") no-repeat;
+      cursor: pointer;
+    }
+  }
+
+
+
+
+}

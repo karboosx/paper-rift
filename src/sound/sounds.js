@@ -31,6 +31,36 @@ var sounds = {
     whoosh_start: {
         src:[require('../assets/sounds/216675__hitrison__stick-swoosh-whoosh.mp3')],
     },
+    hammer: {
+        src:[require('../assets/sounds/207782__dvideoguy__hammering.mp3')],
+    },
+    taunts: {
+        src:[require('../assets/sounds/taunts.mp3')],
+        sprite: {
+            hai: [0, 556],
+            sir: [1085, 609],
+            yes: [2619, 582],
+            ja: [4339, 873],
+            your_majesty: [5689, 1323],
+            ready: [8467, 767],
+            aim: [10530, 794],
+            commands: [12012, 1005],
+            hmm: [13758, 688],
+            move: [15319, 661],
+            heh: [18203, 688],
+            hello: [20902, 820],
+            dead1:[25956,820],
+            dead2:[28099,1058],
+            dead3:[29739,1005],
+            dead4:[30903,926],
+            dead5:[32074,820],
+            dead6:[33337,714],
+            dead7:[34422,661],
+            dead8:[35242,900],
+            dead9:[36407,1032],
+        },
+        volume:0.6,
+    },
 
 
 };
@@ -43,9 +73,10 @@ for (let soundName in sounds) {
 
 var manager = {
     sounds: sounds,
-    play: function (music) {
-        musicHowlers[music].play();
-    }
+    play: function (music, sprite) {
+        musicHowlers[music].play(sprite);
+    },
+
 }
 export default manager;
 
