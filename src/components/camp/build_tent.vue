@@ -34,7 +34,7 @@
                      :class="{plus:unit_type == type}"
                      @click="selectType(unit_type)">{{ units_data[unit_type].name }}</div>
             </div>
-            <div class="ok" @click="buildAction"></div>
+            <button class="ok" @click="buildAction" :disabled="money < cost"></button>
             <div class="cancel" @click="cancelAction"></div>
             <div class="cost">
                 <div>
@@ -43,6 +43,7 @@
                 </div>
             </div>
         </div>
+        <purse></purse>
     </div>
 </template>
 
@@ -53,6 +54,7 @@
     import {units} from '../../components/battle/unit'
     import Unit from '../../components/battle/unit'
     import SoundManager from '../../sound/manager'
+    import Purse from '../../components/purse.vue'
 
     export default {
         props:['x','y'],
@@ -64,12 +66,16 @@
                 units_data: units
             }
         },
+        components:{Purse},
         methods:{
             selectType: function (unit_type) {
                 this.type = unit_type;
             },
             buildAction: function () {
-                this.$parent.buildTent(this.x,this.y,this.type,this.level);
+                if (this.money >= this.cost) {
+                    this.money_dec(this.cost);
+                    this.$parent.buildTent(this.x, this.y, this.type, this.level);
+                }
             },
             cancelAction: function () {
                 this.$parent.cancelBuildTent();
@@ -88,11 +94,10 @@
         },
         vuex:{
             actions:{
-                mute: actions.mute_music,
+                money_dec: actions.money_dec,
             },
             getters: {
-                campaign_x: getters.campaign_x,
-                campaign_y: getters.campaign_y,
+                money: getters.money,
             },
         },
         watch:{

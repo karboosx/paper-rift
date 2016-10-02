@@ -1,6 +1,6 @@
 <template>
     <div class="map" :class="[bgType]">
-        <div class="camp row">
+        <div class="camp row" id="camp">
             <div class="wall">
                 <div class="row full">
                     <div class="tents">
@@ -35,6 +35,8 @@
     import BuildTent from './build_tent.vue'
     import ManageTent from './manage_tent.vue'
     import SoundManager from '../../sound/manager'
+    import Vue from 'vue'
+    import $ from 'jquery'
 
     export default {
         data: function () {
@@ -84,6 +86,24 @@
                 this.buildTentX=undefined;
                 this.buildTentY=undefined;
             },
+            updateTent: function (x,y,type,level, stats) {
+
+                this.tents[x][y].level = level;
+                this.$set('tents['+x+']['+y+'].level', this.tents[x][y].level);
+
+                this.tents[x][y].attack = stats.attack;
+                this.tents[x][y].defence = stats.defence;
+                this.tents[x][y].speed = stats.speed;
+                this.tents[x][y].maxHealth = stats.hp;
+                this.tents[x][y].health = stats.hp;
+                this.tents[x][y].maxAp = stats.ap;
+                this.tents[x][y].ap = stats.ap;
+
+                SoundManager.playSound('hammer')
+
+                this.buildTentX=undefined;
+                this.buildTentY=undefined;
+            },
             cancelBuildTent: function () {
                 this.buildTentX=undefined;
                 this.buildTentY=undefined;
@@ -108,6 +128,25 @@
         created: function () {
             this.tents[1][1] = new Unit().setTentPos(1,1).setType('king').setParty('player').setPos(0, 2).setLevel(5);
             this.tents[2][1] = new Unit().setTentPos(2,1).setType('swordman').setParty('player').setPos(0, 2).setLevel(2);
+            this.$set('tents['+2+']['+1+']', this.tents[2][1]);
+            var that = this;
+            Vue.nextTick(function () {
+
+                var body = $('body');
+                var width = body.width();
+                var height = body.height();
+//                that.screenX = (width);
+//                that.screenY = (height);
+
+                var top = height - 4*200-30;
+
+                if (top > 0) top = 20;
+
+                $('#camp').draggable({
+                    containment: [0 ,top, 0,20]
+                })
+
+            })
         }
     }
 </script>

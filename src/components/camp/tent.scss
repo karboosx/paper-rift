@@ -102,12 +102,8 @@
     margin-top: 304px;
     margin-left: -11px;
     transform: rotate(20deg);
-    background: url("../../assets/images/gui/manage_tent_ok.png") no-repeat;
-
-    &:hover{
-      background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
-      cursor: pointer;
-    }
+    outline: none;
+    border: none;
   }
 
   .center{
@@ -376,15 +372,11 @@
     width: 71px;
     height: 121px;
     position: relative;
+    outline: none;
+    border: none;
     top: -330px;
     left: 670px;
     transform: rotate(20deg);
-    background: url("../../assets/images/gui/manage_tent_ok.png") no-repeat;
-
-    &:hover{
-      background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
-      cursor: pointer;
-    }
   }
 
   .cancel{
@@ -401,8 +393,20 @@
       cursor: pointer;
     }
   }
+}
 
 
+.ok{
+  margin: 0;
+  padding: 0;
+  background: url("../../assets/images/gui/manage_tent_ok.png") no-repeat;
 
+  &:hover{
+    background: url("../../assets/images/gui/manage_tent_ok_hover.png") no-repeat;
+    cursor: pointer;
+  }
 
+  &:disabled{
+    background: url("../../assets/images/gui/manage_tent_ok_disabled.png") no-repeat;
+  }
 }

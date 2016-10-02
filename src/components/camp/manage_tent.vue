@@ -17,7 +17,7 @@
                         <input class="input gui basic six" v-model="name">
                         <div class="convenience">
                             <div class="name">Conveniences</div>
-                            <div v-for="(convenience, pleasure) in conveniences['lvl'+tent.level]">
+                            <div v-for="(convenience, pleasure) in conveniences['lvl'+newLevel]">
                                 <div class="convenience_name" :class="{green:pleasure>=0, red:pleasure<0}">
                                     {{ conveniencesNames[convenience] }}
                                 </div>
@@ -29,25 +29,25 @@
                     <div class="informations">
                         <div class="information center">
                             <div class="icon small sword"></div>
-                            {{ tent.attack }}
+                            {{ stats.attack }}
                         </div>
                         <div class="information center">
                             <div class="icon small shield"></div>
-                            {{ tent.defence }}
+                            {{ stats.defence }}
                         </div>
                         <div class="information center">
                             <div class="icon small boots"></div>
-                            {{ tent.speed }}%
+                            {{ stats.speed }}%
                         </div>
                     </div>
                     <div class="informations">
                         <div class="information center">
                             <div class="icon small arrow"></div>
-                            {{ tent.maxAp }}
+                            {{ stats.ap }}
                         </div>
                         <div class="information center">
                             <div class="icon small heart"></div>
-                            {{ tent.maxHealth }}
+                            {{ stats.hp }}
                         </div>
                     </div>
                 </div>
@@ -67,10 +67,11 @@
                     <div class="amount">{{ cost }}</div>
                 </div>
             </div>
-            <div class="ok" @click="saveAction">
-            </div>
+            <button class="ok" @click="saveAction" :disabled="money < cost">
+            </button>
 
         </div>
+        <purse></purse>
     </div>
 </template>
 
@@ -81,6 +82,7 @@
     import {units, conveniences, conveniencesNames} from '../../components/battle/unit'
     import Unit from '../../components/battle/unit'
     import SoundManager from '../../sound/manager'
+    import Purse from '../../components/purse.vue'
 
     export default {
         props:['tent'],
@@ -112,6 +114,7 @@
                 ]
             }
         },
+        components:{Purse},
         methods:{
             selectType: function (unit_type) {
                 this.type = unit_type;
@@ -124,8 +127,11 @@
                 }
             },
             saveAction: function () {
-                //this.$parent.buildTent(this.x,this.y,this.type,this.level);
 
+                if (this.money >= this.cost && this.cost > 0) {
+                    this.money_dec(this.cost);
+                    this.$parent.updateTent(this.tent.tent_x,this.tent.tent_y,this.type,this.newLevel, this.stats);
+                }
                 this.cancelAction();
             },
             cancelAction: function () {
@@ -138,6 +144,19 @@
             }
         },
         computed: {
+            stats: function () {
+                var upgrade = 0.2;
+                var mult = (this.newLevel-this.actualLevel)*upgrade;
+
+                return {
+                    attack:this.tent.attack+Math.round(this.tent.attack*mult),
+                    defence:this.tent.defence+Math.ceil(this.tent.defence*mult),
+                    speed:this.tent.speed+Math.round(this.tent.speed*mult),
+                    hp:this.tent.maxHealth+Math.ceil(this.tent.maxHealth*mult),
+                    ap:this.tent.maxAp+Math.floor(this.tent.maxAp*mult),
+                };
+
+            },
             type: function () {
                 return this.tent.type;
             },
@@ -153,11 +172,11 @@
         },
         vuex:{
             actions:{
-                mute: actions.mute_music,
+
+                money_dec: actions.money_dec,
             },
             getters: {
-                campaign_x: getters.campaign_x,
-                campaign_y: getters.campaign_y,
+                money: getters.money,
             },
         },
         watch:{

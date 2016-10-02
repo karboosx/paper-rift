@@ -1,5 +1,7 @@
 .camp{
   width: 100vw;
+  height: 800px;
+  min-height: 100vh;
 }
 
 .row{
@@ -57,7 +59,8 @@
 }
 
 .wall{
-  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 30px;
   border: 66.6666667px solid transparent;
   border-top-width: 0;
   border-bottom-width: 0;

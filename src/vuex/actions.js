@@ -13,6 +13,14 @@ var actions = {
         SoundManager.unmuteMusic();
     },
 
+    money_inc: function ({dispatch}, amount) {
+        dispatch(mutations.MONEY_INC, amount)
+    },
+    money_dec: function ({dispatch}, amount) {
+        console.log(amount)
+        dispatch(mutations.MONEY_DEC, amount)
+    },
+
 }
 
 export default actions;
