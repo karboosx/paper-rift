@@ -1,7 +1,18 @@
 const state = {
-    x: 0,
-    y: 0,
+    x: 5,
+    y: 5,
     money: 1000,
+    map: [
+        ['grass', 'mud'  , 'mud'  , 'mud'  , 'grass', 'grass', 'mud'  , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['mud'  , 'mud'  , 'water', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['mud'  , 'water', 'water', 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'grass', 'lava' , 'lava' , 'lava' , 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'grass', 'lava' , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ['water', 'water', 'grass', 'lava' , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+        ]
 }
 
 const mutations = {

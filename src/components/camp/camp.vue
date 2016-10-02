@@ -22,10 +22,13 @@
     </div>
     <div class="ornament top"></div>
     <div class="ornament bottom"></div>
-    <div class="attack_button" v-link="{name:'random_battle'}"></div>
+    <!--<div class="attack_button" v-link="{name:'random_battle'}"></div>-->
 
     <build-tent v-if="showBuildTent" :x="buildTentX" :y="buildTentY"></build-tent>
     <manage-tent v-if="manageTent" :tent.sync="tents[manageTentX][manageTentY]"></manage-tent>
+    <map v-if="showMap"></map>
+    <div class="map_button" @click="toogleMap"></div>
+
 </template>
 
 <script type="text/babel">
@@ -33,6 +36,7 @@
     import getters from '../../vuex/getters'
     import map from '../../map'
     import Unit from '../../components/battle/unit'
+    import Map from '../../components/map/map.vue'
     import BuildTent from './build_tent.vue'
     import ManageTent from './manage_tent.vue'
     import SoundManager from '../../sound/manager'
@@ -52,11 +56,12 @@
                 buildTentY:undefined,
                 manageTentX:undefined,
                 manageTentY:undefined,
+                showMap:false,
                 clickLock:false,
             }
         },
         components:{
-            BuildTent, ManageTent
+            BuildTent, ManageTent, Map
         },
         vuex:{
             actions:{
@@ -68,6 +73,9 @@
             },
         },
         methods:{
+            toogleMap: function () {
+                this.showMap = !this.showMap;
+            },
             selectTentToBuild: function (x, y) {
                 if (this.clickLock) return;
                 this.buildTentX=x;
