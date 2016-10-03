@@ -96,3 +96,26 @@
     cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
   }
 }
+
+@keyframes cloud {
+  from{
+    left:-100vw;
+  }
+  to{
+    left:200vw;
+  }
+}
+.cloud{
+  position: absolute;
+  background: url("../../assets/images/gui/cloud.png") no-repeat;
+  width:576px;
+  height:256px;
+  opacity: 0.5;
+  background-size: contain;
+
+  pointer-events: none;
+  animation-name: cloud;
+  animation-duration: 80s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}

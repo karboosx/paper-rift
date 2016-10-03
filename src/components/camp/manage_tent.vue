@@ -117,9 +117,13 @@
         components:{Purse},
         methods:{
             selectType: function (unit_type) {
+
+                SoundManager.playSound('click');
                 this.type = unit_type;
             },
             selectUpgrade: function (level) {
+
+                SoundManager.playSound('click');
                 if (level.level == this.newLevel){
                     this.newLevel = this.actualLevel; //cofniecie zniam
                 }else{
@@ -128,6 +132,7 @@
             },
             saveAction: function () {
 
+                SoundManager.playSound('click');
                 if (this.money >= this.cost && this.cost > 0) {
                     this.money_dec(this.cost);
                     this.$parent.updateTent(this.tent.tent_x,this.tent.tent_y,this.type,this.newLevel, this.stats);

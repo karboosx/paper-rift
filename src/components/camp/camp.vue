@@ -22,13 +22,16 @@
     </div>
     <div class="ornament top"></div>
     <div class="ornament bottom"></div>
-    <!--<div class="attack_button" v-link="{name:'random_battle'}"></div>-->
+    <div v-if="enemyReady" class="attack_button" v-link="{name:'random_battle'}"></div>
 
     <build-tent v-if="showBuildTent" :x="buildTentX" :y="buildTentY"></build-tent>
     <manage-tent v-if="manageTent" :tent.sync="tents[manageTentX][manageTentY]"></manage-tent>
     <map v-if="showMap"></map>
-    <div class="map_button" @click="toogleMap"></div>
+    <div v-if="!enemyReady || showMap" class="map_button" @click="toogleMap"></div>
 
+    <!--<div v-for="cloud in clouds" track-by="$index"-->
+         <!--class="cloud" :style="{'margin-left':cloud.left+'vw',  'margin-top':cloud.top+'vh', width: cloud.width+'px'}">-->
+    <!--</div>-->
 </template>
 
 <script type="text/babel">
@@ -58,6 +61,7 @@
                 manageTentY:undefined,
                 showMap:false,
                 clickLock:false,
+                cloudsLimit:15,
             }
         },
         components:{
@@ -68,6 +72,8 @@
                 mute: actions.mute_music,
             },
             getters: {
+                campaign_map: getters.map,
+                enemy_list: getters.enemy_list,
                 campaign_x: getters.campaign_x,
                 campaign_y: getters.campaign_y,
             },
@@ -75,14 +81,15 @@
         methods:{
             toogleMap: function () {
                 this.showMap = !this.showMap;
+                SoundManager.playSound('paper_crumpled');
             },
             selectTentToBuild: function (x, y) {
-                if (this.clickLock) return;
+                if (this.clickLock || this.enemyReady) return;
                 this.buildTentX=x;
                 this.buildTentY=y;
             },
             selectTentToManage: function (x, y) {
-                if (this.clickLock) return;
+                if (this.clickLock || this.enemyReady) return;
                 this.manageTentX=x;
                 this.manageTentY=y;
                 SoundManager.playRandomTaunt();
@@ -127,6 +134,30 @@
 
         },
         computed:{
+            enemyReady: function () {
+                for (var i = 0; i < this.enemy_list.length; i++) {
+                    var enemy = this.enemy_list[i];
+
+                    if (enemy.x == this.campaign_x && enemy.y == this.campaign_y){
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            clouds: function () {
+                var clouds = [];
+
+                for (let i=0;i<this.cloudsLimit;i++){
+                    clouds.push({
+                        left:Math.floor(Math.random()*150)-50,
+                        top:Math.floor(Math.random()*100),
+                        width:Math.floor(Math.random()*200)+100,
+                    });
+                }
+
+                return clouds;
+            },
             showBuildTent: function () {
                 return this.buildTentX != undefined && this.buildTentY != undefined;
             },
@@ -134,7 +165,7 @@
                 return this.manageTentX != undefined && this.manageTentY != undefined;
             },
             bgType: function () {
-                return map.map[this.campaign_x][this.campaign_y];
+                return this.campaign_map[this.campaign_y][this.campaign_x];
             }
         },
         created: function () {

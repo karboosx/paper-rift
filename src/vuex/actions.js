@@ -17,8 +17,10 @@ var actions = {
         dispatch(mutations.MONEY_INC, amount)
     },
     money_dec: function ({dispatch}, amount) {
-        console.log(amount)
         dispatch(mutations.MONEY_DEC, amount)
+    },
+    move: function ({dispatch}, x,y) {
+        dispatch(mutations.CAMPAIGN_CHANGE_POSITION, x,y)
     },
 
 }

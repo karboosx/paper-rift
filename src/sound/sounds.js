@@ -62,6 +62,22 @@ var sounds = {
         },
         volume:0.6,
     },
+    turn_page: {
+        src:[require('../assets/sounds/63318__flag2__page-turn-please-turn-over-pto-paper-turn-over.mp3')],
+        volume:0.5
+    },
+    click: {
+        src:[require('../assets/sounds/198449__callum-sharp279__menu-scroll-selection-sound.mp3')],
+        volume:0.5
+    },
+    paper_crumpled: {
+        src:[require('../assets/sounds/197179__razrox__paper-crumpled-001.mp3')],
+        volume:0.5
+    },
+    paper_crumpled_2: {
+        src:[require('../assets/sounds/197179__razrox__paper-crumpled-002.mp3')],
+        volume:0.5
+    },
 
 
 };
