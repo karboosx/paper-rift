@@ -4,7 +4,7 @@
             <div class="wall">
                 <div class="row full">
                     <div class="tents">
-                        <div class="row" v-for="tent_row in tents">
+                        <div class="tents_column" v-for="tent_row in tents">
                             <template v-for="tent in tent_row">
                                 <div v-if="tent.type != undefined" class="tent" transition="opacity"  @click="selectTentToManage(tent.tent_x, tent.tent_y)">
                                     <div class="image" :class="['lvl'+tent.level]">
@@ -22,12 +22,19 @@
     </div>
     <div class="ornament top"></div>
     <div class="ornament bottom"></div>
-    <div v-if="enemyReady" class="attack_button" v-link="{name:'random_battle'}"></div>
+    <div class="battle_container" v-if="nextturn" transition="battle">
+        <div class="battle">
+            <div class="text">Battle!</div>
+            <div class="attack_button" @click="goToBattle"></div>
+            <div class="text">Battle!</div>
+        </div>
+    </div>
+
 
     <build-tent v-if="showBuildTent" :x="buildTentX" :y="buildTentY"></build-tent>
     <manage-tent v-if="manageTent" :tent.sync="tents[manageTentX][manageTentY]"></manage-tent>
-    <map v-if="showMap"></map>
-    <div v-if="!enemyReady || showMap" class="map_button" @click="toogleMap"></div>
+    <map v-if="showMap" :nextturn.sync="nextturn"></map>
+    <div v-if="!nextturn || showMap" class="map_button" @click="toogleMap"></div>
 
     <!--<div v-for="cloud in clouds" track-by="$index"-->
          <!--class="cloud" :style="{'margin-left':cloud.left+'vw',  'margin-top':cloud.top+'vh', width: cloud.width+'px'}">-->
@@ -45,6 +52,7 @@
     import SoundManager from '../../sound/manager'
     import Vue from 'vue'
     import $ from 'jquery'
+    import LoadSave from '../loadsave'
 
     export default {
         data: function () {
@@ -62,6 +70,7 @@
                 showMap:false,
                 clickLock:false,
                 cloudsLimit:15,
+                nextturn:false,
             }
         },
         components:{
@@ -70,6 +79,8 @@
         vuex:{
             actions:{
                 mute: actions.mute_music,
+                loadGame: actions.loadGame,
+                saveGame: actions.saveGame,
             },
             getters: {
                 campaign_map: getters.map,
@@ -79,6 +90,10 @@
             },
         },
         methods:{
+            goToBattle: function () {
+                this.autoSaveGame();
+                this.$route.router.go({name:'battle'})
+            },
             toogleMap: function () {
                 this.showMap = !this.showMap;
                 SoundManager.playSound('paper_crumpled');
@@ -104,6 +119,7 @@
 
                 this.buildTentX=undefined;
                 this.buildTentY=undefined;
+                this.autoSaveGame();
             },
             updateTent: function (x,y,type,level, stats) {
 
@@ -122,6 +138,7 @@
 
                 this.buildTentX=undefined;
                 this.buildTentY=undefined;
+                this.autoSaveGame();
             },
             cancelBuildTent: function () {
                 this.buildTentX=undefined;
@@ -131,20 +148,27 @@
                 this.manageTentX=undefined;
                 this.manageTentY=undefined;
             },
-
-        },
-        computed:{
-            enemyReady: function () {
-                for (var i = 0; i < this.enemy_list.length; i++) {
-                    var enemy = this.enemy_list[i];
-
-                    if (enemy.x == this.campaign_x && enemy.y == this.campaign_y){
-                        return true;
+            autoSaveGame: function () {
+                var own = [];
+                for (var x = 0; x < this.tents.length; x++) {
+                    for (var y = 0; y < this.tents[x].length; y++) {
+                        var tent = this.tents[x][y];
+                        if (tent instanceof Unit){
+                            own.push(tent)
+                        }
                     }
                 }
+                console.log(own);
 
-                return false;
-            },
+                this.saveGame(own, []);
+            }
+        },
+        watch:{
+            nextturn: function () {
+                SoundManager.playSound('horn');
+            }
+        },
+        computed:{
             clouds: function () {
                 var clouds = [];
 
@@ -169,9 +193,17 @@
             }
         },
         created: function () {
-            this.tents[1][1] = new Unit().setTentPos(1,1).setType('king').setParty('player').setPos(0, 2).setLevel(5);
-            this.tents[2][1] = new Unit().setTentPos(2,1).setType('swordman').setParty('player').setPos(0, 2).setLevel(2);
-            this.$set('tents['+2+']['+1+']', this.tents[2][1]);
+
+            var game = this.loadGame();
+
+            for (var i = 0; i < game.own.length; i++) {
+                var tent = game.own[i];
+
+                console.log(tent.tent_x,tent.tent_y);
+                this.tents[tent.tent_x][tent.tent_y] = tent;
+                this.$set('tents['+tent.tent_x+']['+tent.tent_y+']', tent);
+            }
+
             var that = this;
             Vue.nextTick(function () {
 

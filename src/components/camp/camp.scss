@@ -13,6 +13,21 @@
   }
 }
 
+.tents{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+}
+
+.tents_column{
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .tent{
   width: 200px;
   height: 200px;
@@ -67,20 +82,67 @@
   border-image: url(../../assets/images/camp/wall.png) 70 fill repeat;
 }
 
-.attack_button{
-  background-image: url("../../assets/images/gui/attack.png");
-  width:195px;
-  height:200px;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  transition: 0.1s all ease-out;
+$battle_belt_height: 200px;
 
-  &:hover{
-    background: url("../../assets/images/gui/attack_hover.png");
-    cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
+.battle_container{
+  position: fixed;
+  height: 100vh;
+  width:100vw;
+  background: rgba(31, 0, 0, 0.72);
+  z-index: 100000;
+}
+
+.battle{
+  position: fixed;
+  top: calc(50vh - #{$battle_belt_height/2});
+  height: $battle_belt_height;
+  width: 100vw;
+  z-index: 100000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #9e3333;
+  box-shadow: 0 0 10px #737373;
+
+  .text{
+    font-size: $battle_belt_height/2;
+    color: white;
+  }
+
+  .attack_button{
+    background-image: url("../../assets/images/gui/attack.png");
+    width:195px;
+    height:200px;
+    bottom: 30px;
+    right: 30px;
+    transition: 0.1s all ease-out;
+
+    &:hover{
+      background: url("../../assets/images/gui/attack_hover.png");
+      cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
+    }
   }
 }
+
+.battle-transition{
+  transition: 0.2s all ease-out;
+  opacity: 1;
+
+  .battle{
+    transition: 0.2s all ease-out;
+    left:0;
+    transform: scale(1) rotate(0deg);
+  }
+}
+.battle-enter, .battle-leave{
+  opacity: 0;
+
+  .battle{
+    left:-100vw;
+    transform: scale(0) rotate(30deg);
+  }
+}
+
 .map_button{
   background-image: url("../../assets/images/gui/map.png");
   width:198px;

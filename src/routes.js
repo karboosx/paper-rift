@@ -1,5 +1,5 @@
 import Index from './pages/index.vue'
-import RandomBattle from './pages/random_battle.vue'
+import Battle from './pages/battle.vue'
 import Camp from './pages/camp.vue'
 
 var routes = {
@@ -13,9 +13,9 @@ var routes = {
         component: Camp,
         music:'camp'
     },
-    '/random_battle': {
-        name: 'random_battle',
-        component: RandomBattle,
+    '/battle': {
+        name: 'battle',
+        component: Battle,
         music:'battle'
     },
 };

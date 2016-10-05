@@ -133,6 +133,7 @@
             saveAction: function () {
 
                 SoundManager.playSound('click');
+                this.tent.name = this.name;
                 if (this.money >= this.cost && this.cost > 0) {
                     this.money_dec(this.cost);
                     this.$parent.updateTent(this.tent.tent_x,this.tent.tent_y,this.type,this.newLevel, this.stats);

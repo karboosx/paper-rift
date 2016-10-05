@@ -3,8 +3,9 @@
         <div class="options">
             <div class="gui basic hover two center" v-if="!music_mute" @click="mute">Music ON</div>
             <div class="gui basic hover two center" v-if="music_mute" @click="unmute">Music OFF</div>
+            <a class="gui basic hover two center" v-if="$route.name != 'index'" v-link="{name:'index', replace:true}">Main Menu</a>
 
-            <a class="gui basic hover two center" v-link="{name:'index', replace:true}">Main Menu</a>
+            <a class="gui basic hover two center" @click="escape">Back</a>
         </div>
     </div>
 </template>
@@ -21,6 +22,13 @@
             },
             getters: {
                 music_mute: getters.music_mute,
+            }
+        },
+        methods:{
+            escape: function () {
+                if (this.$parent.isOptionsShow){
+                    this.$parent.isOptionsShow = false;
+                }
             }
         }
     }

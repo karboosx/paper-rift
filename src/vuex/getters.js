@@ -9,6 +9,7 @@ var getters = {
     map_x: (state) => state.Campaign.map[0].length-1,
     map_y: (state) => state.Campaign.map.length-1,
     enemy_list: (state) => state.Campaign.enemy,
+    win_price: (state) => state.Campaign.win_price,
 }
 
 export default getters;

@@ -291,3 +291,20 @@ body *{
     bottom: -23px;
   }
 }
+
+#loading{
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  position: fixed;
+  z-index: 100000000000;
+  background: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  color: wheat;
+  font-size: 3em;
+  display: none;
+}

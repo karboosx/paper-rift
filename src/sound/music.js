@@ -1,4 +1,5 @@
 import {Howl} from 'howler'
+import loading from './loading'
 
 var musics = {
     menu: {
@@ -18,10 +19,31 @@ var musics = {
 };
 
 var musicHowlers = {};
+var loadedMusic = 0;
+var musicCount = 0;
+
+function checkIfLoaded(){
+    if (musicCount == loadedMusic){
+        loading.loaded('music');
+    }
+}
 
 for (let musicName in musics) {
+    musicCount++;
+}
+
+for (let musicName in musics) {
+
+    musics[musicName].onload = function () {
+        loadedMusic++;
+
+        checkIfLoaded();
+    }
+
     musicHowlers[musicName] = new Howl(musics[musicName]);
 }
+
+
 
 var manager = {
     musics: musics,

@@ -1,8 +1,8 @@
 <template>
     <div class="page">
         <div class="menu" id="menu">
-            <div v-link="{name:'camp'}" class="gui basic two hover center">Start New Game</div>
-            <div v-link="{name:'random_battle'}" class="gui basic three hover center">Random Battle</div>
+            <div v-if="haveGame" v-link="{name:'camp'}" class="gui basic two hover center">Continue Game</div>
+            <div @click="newGame" class="gui basic two hover center">Start New Game</div>
             <div class="gui basic two hover center" @click="showOptions">Options</div>
         </div>
         <div class="heroes" id="heroes"></div>
@@ -20,11 +20,13 @@
     import menu_splash from '../animations/menu_splash'
     import OptionsMixin from '../mixins/options'
     import Options from '../components/options/options.vue'
+    import LoadSave from '../components/loadsave'
 
     export default {
         data: function () {
             return {
-                isOptionsShow: false
+                isOptionsShow: false,
+                haveGame: LoadSave.checkIfGameIsSaved()
             }
         },
         mixins:[OptionsMixin],
@@ -35,8 +37,15 @@
             getters: {
             }
         },
+        methods: {
+            newGame: function () {
+                LoadSave.createNewGame();
+                this.$route.router.go({name:'camp'});
+            }
+        },
         events: {
             keyup: function (code) {
+                console.log(code)
                 if (code == 27){
                     this.showOptions();
                 }

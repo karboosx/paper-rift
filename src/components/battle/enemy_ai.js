@@ -202,6 +202,7 @@ export default {
             this.playerTurn = true;
 
             SoundManager.playSound('turn')
+            this.calculateMap();
         },
     }
 }

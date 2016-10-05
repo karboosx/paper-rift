@@ -73,7 +73,7 @@ export var conveniences = {
     lvl4:{
         personalLiving:1,
         mediumTent:1,
-        balcon:1,
+        tv:1,
         toitoi:1,
     },
     lvl5:{
@@ -91,6 +91,7 @@ export var conveniencesNames = {
     bigTent:'Huge Tent',
     balcon:'Balcon',
     toitoi:'Privy',
+    tv:'Satellite TV',
 }
 
 

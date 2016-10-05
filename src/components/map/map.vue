@@ -7,8 +7,9 @@
                          :style="{left:tile.left+'px', top:tile.top+'px', transform:'rotate('+tile.rot+'deg)'}"
                          @click="moveToTile(tile)">
                         <div class="text">{{ tiles[tile.type].name }}</div>
+
                         <div class="move" v-if="tile.move">
-                            <div class="text">Can go</div>
+                            <!--<div class="text">Can go</div>-->
                         </div>
 
                         <div class="hero player" v-if="tile.x == campaign_x && tile.y == campaign_y"></div>
@@ -25,14 +26,17 @@
     import actions from '../../vuex/actions'
     import getters from '../../vuex/getters'
     import SoundManager from '../../sound/manager'
+    import Vue from 'vue'
 
     export default {
+        props:['nextturn'],
         data: function () {
+
             return {
                 x:10,
                 y:10,
-                tile_width:45,
-                tile_height:45,
+                tile_width:50,
+                tile_height:50,
                 tile_randomize:true,
                 next_turn:false,
                 markToMoveX:undefined,
@@ -64,9 +68,12 @@
                 this.next_turn = true;
                 setTimeout(function () {
                     that.move(tile.x, tile.y)
+                    that.$parent.autoSaveGame();
                     SoundManager.playSound('paper_crumpled_2');
 
-                    that.next_turn = false;
+                    Vue.nextTick(function () {
+                        that.next_turn = false;
+                    })
                 }, 600)
 
             },
@@ -75,8 +82,14 @@
                 this.markToMoveY = y;
             }
         },
+        watch:{
+            enemyReady: function (val) {
+                this.nextturn = val;
+            }
+        },
         computed: {
             enemyReady: function () {
+                if (this.next_turn) return false;
                 for (var i = 0; i < this.enemy_list.length; i++) {
                     var enemy = this.enemy_list[i];
 
@@ -97,6 +110,8 @@
 
                         let rot = 0;
                         let tileRand = (x*y)%7+1;
+                        if (tileRand == 2 || tileRand==3) tileRand =4;
+//                        let tileRand = 1;
                         let type = this.campaign_map[y][x];
                         let highlight = (x == this.campaign_x && y == this.campaign_y) ? 'highlight' : '';
 

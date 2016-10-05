@@ -1,4 +1,5 @@
 import {Howl} from 'howler'
+import loading from './loading'
 
 var sounds = {
     sword_attack: {
@@ -78,13 +79,38 @@ var sounds = {
         src:[require('../assets/sounds/197179__razrox__paper-crumpled-002.mp3')],
         volume:0.5
     },
+    horn: {
+        src:[require('../assets/sounds/175946__freefire66__horn002.mp3')],
+        volume:1
+    },
+    gain_money: {
+        src:[require('../assets/sounds/213980__fenrirfangs__coin-clatter-2.mp3')],
+        volume:1
+    },
 
 
 };
 
 var musicHowlers = {};
+var loadedMusic = 0;
+var musicCount = 0;
+
+function checkIfLoaded(){
+    if (musicCount == loadedMusic){
+        loading.loaded('sound');
+    }
+}
+for (let soundName in sounds) {
+    musicCount++;
+}
 
 for (let soundName in sounds) {
+    sounds[soundName].onload = function () {
+        loadedMusic++;
+
+        checkIfLoaded();
+    }
+
     musicHowlers[soundName] = new Howl(sounds[soundName]);
 }
 

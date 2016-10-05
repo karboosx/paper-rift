@@ -40,7 +40,7 @@ var App = Vue.extend({
         },
         loadOptions: function () {
             var muteMusic = localStorage.getItem('MUSIC_MUTE');
-            if (muteMusic){
+            if (muteMusic == 'true'){
                 this.mute_music();
             }else{
                 this.unmute_music();
