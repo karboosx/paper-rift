@@ -587,7 +587,7 @@
             },
             gainPrice: function (amount) {
                 var that = this;
-                that.removeEnemy();
+
                 if (amount>0){
                     this.money_inc(1);
                     setTimeout(function () {
@@ -598,6 +598,7 @@
                         }
                     }, 100);
                 }else{
+                    that.removeEnemy();
                     that.autoSaveGame();
                     that.allowBack=true;
                 }

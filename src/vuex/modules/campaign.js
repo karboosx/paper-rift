@@ -34,8 +34,16 @@ const mutations = {
     CHANGE_WIN_PRICE: function (state, price) {
         state.win_price = price;
     },
-    REMOVE_ENEMY: function (state, id) {
-        state.enemy = state.enemy.splice(id, 1);
+    REMOVE_ENEMY: function (state) {
+        var enemys = [];
+        for (var i = 0; i < state.enemy.length; i++) {
+            var enemy = state.enemy[i];
+
+            if (!(enemy.x == state.x && enemy.y == state.y)){
+                enemys.push(enemy);
+            }
+        }
+        state.enemy = enemys;
     },
     LOAD_GAME: function (state, x,y,money, enemys) {
         state.enemy = enemys;

@@ -169,6 +169,16 @@
             }
         },
         computed:{
+            enemyReady: function () {
+                for (var i = 0; i < this.enemy_list.length; i++) {
+                    var enemy = this.enemy_list[i];
+
+                    if (enemy.x == this.campaign_x && enemy.y == this.campaign_y){
+                        return true;
+                    }
+                }
+                return false;
+            },
             clouds: function () {
                 var clouds = [];
 
@@ -199,12 +209,15 @@
             for (var i = 0; i < game.own.length; i++) {
                 var tent = game.own[i];
 
-                console.log(tent.tent_x,tent.tent_y);
                 this.tents[tent.tent_x][tent.tent_y] = tent;
                 this.$set('tents['+tent.tent_x+']['+tent.tent_y+']', tent);
             }
 
             var that = this;
+            if (that.enemyReady){
+                that.$route.router.go({name:'battle'});
+            }
+
             Vue.nextTick(function () {
 
                 var body = $('body');

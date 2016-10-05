@@ -93,21 +93,7 @@
                 y:y,
                 own:generateOwn(),
                 enemy:generateEnemy(),
-//                        [
-//                    new Unit().setPos(2,5).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,2).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,3).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(x-1,4).setType('king').setParty('enemy').setMovable(false),
-//
-//                    new Unit().setPos(8,3).setType('king').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(8,4).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(8,2).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(8,1).setType('cavalry').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(9,1).setType('swordman').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(9,2).setType('swordman').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(9,3).setType('swordman').setParty('enemy').setMovable(false),
-//                    new Unit().setPos(9,4).setType('swordman').setParty('enemy').setMovable(false),
-//                ],
+
                 obstacles: obstacles
             }
         },
