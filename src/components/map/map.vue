@@ -1,15 +1,15 @@
 <template>
     <div class="map_container" :class="{full : tile_randomize || next_turn}">
-        <div class="campaign_map">
+        <div class="campaign_map" :style="{width:width_map+'px',height:height_map+'px'}">
             <div class="inner">
                 <template v-for="tile in map" track-by="$index">
                     <div class="tile" :class="['rand'+tile.rand, tile.type, tile.highlight]"
                          :style="{left:tile.left+'px', top:tile.top+'px', transform:'rotate('+tile.rot+'deg)'}"
                          @click="moveToTile(tile)">
-                        <div class="text">{{ tiles[tile.type].name }}</div>
+                        <div class="text" v-if="tile.is_enemy">Level {{ tile.enemyData.level }}</div>
 
                         <div class="move" v-if="tile.move">
-                            <!--<div class="text">Can go</div>-->
+                            <div class="text" v-if="tile.is_enemy">Money {{ tile.enemyData.money }}</div>
                         </div>
 
                         <div class="hero player" v-if="tile.x == campaign_x && tile.y == campaign_y"></div>
@@ -27,6 +27,7 @@
     import getters from '../../vuex/getters'
     import SoundManager from '../../sound/manager'
     import Vue from 'vue'
+    import LoadSave from '../loadsave'
 
     export default {
         props:['nextturn'],
@@ -41,6 +42,8 @@
                 next_turn:false,
                 markToMoveX:undefined,
                 markToMoveY:undefined,
+                markEnemyHighlightX:undefined,
+                markEnemyHighlightY:undefined,
                 tiles:{
                     grass:{
                         name:'Grass',
@@ -64,14 +67,22 @@
                 var that = this;
                 SoundManager.playSound('paper_crumpled');
 
+                var newEnemy = that.generateEnemys();
+                if (newEnemy != undefined){
+                    this.markEnemyHighlight(newEnemy.x,newEnemy.y);
+                }
                 this.markToMove(tile.x, tile.y)
                 this.next_turn = true;
                 setTimeout(function () {
                     that.move(tile.x, tile.y)
+                    if (newEnemy != undefined) {
+                        that.addNewEnemy(newEnemy.x, newEnemy.y, newEnemy.level, newEnemy.money);
+                    }
                     that.$parent.autoSaveGame();
                     SoundManager.playSound('paper_crumpled_2');
 
                     Vue.nextTick(function () {
+                        that.clearEnemyHighlight();
                         that.next_turn = false;
                     })
                 }, 600)
@@ -80,6 +91,45 @@
             markToMove: function (x,y) {
                 this.markToMoveX = x;
                 this.markToMoveY = y;
+            },
+            markEnemyHighlight: function (x,y) {
+                this.markEnemyHighlightX = x;
+                this.markEnemyHighlightY = y;
+            },
+            clearEnemyHighlight: function () {
+                this.markEnemyHighlightX = undefined;
+                this.markEnemyHighlightY = undefined;
+            },
+            generateEnemys: function () {
+                var rand = Math.floor(Math.random()*100);
+
+                if (rand < 30){
+                    var rand_X = Math.floor(Math.random()*(this.map_x+1));
+                    var rand_Y = Math.floor(Math.random()*(this.map_y+1));
+
+                    for (var i = 0; i < this.enemy_list.length; i++) {
+                        var enemy = this.enemy_list[i];
+                        if (enemy.x == rand_X && enemy.y == rand_Y){
+                            return;
+                        }
+                    }
+
+                    if (this.campaign_map[rand_Y][rand_X] == 'water'){
+                        return;
+                    }
+
+                    var ownLength = LoadSave.loadOwn().length;
+                    var level = Math.floor(Math.random()*(ownLength+1))+1;
+                    var money = Math.floor(Math.random()*(level+1))*(level)*5+10;
+                    console.log(level, money);
+
+                    return {
+                        x:rand_X,
+                        y:rand_Y,
+                        level:level,
+                        money:money
+                    }
+                }
             }
         },
         watch:{
@@ -88,6 +138,12 @@
             }
         },
         computed: {
+            width_map: function () {
+                return this.map_x*this.tile_width;
+            },
+            height_map: function () {
+                return this.map_y*this.tile_height;
+            },
             enemyReady: function () {
                 if (this.next_turn) return false;
                 for (var i = 0; i < this.enemy_list.length; i++) {
@@ -114,25 +170,29 @@
 //                        let tileRand = 1;
                         let type = this.campaign_map[y][x];
                         let highlight = (x == this.campaign_x && y == this.campaign_y) ? 'highlight' : '';
+                        let enemyHighlight = (x == this.markEnemyHighlightX && y == this.markEnemyHighlightY);
 
                         let move = (!this.enemyReady && type != 'water' && Math.abs(x-this.campaign_x)<=1 && Math.abs(y-this.campaign_y)<=1 && !(x == this.campaign_x && y == this.campaign_y));
                         move = move || (!this.enemyReady && type != 'water' && Math.abs(x-this.markToMoveX)<=1 && Math.abs(y-this.markToMoveY)<=1);
 
                         let is_enemy = false;
+                        let enemyData = [];
                         for (var i = 0; i < this.enemy_list.length; i++) {
                             var enemy = this.enemy_list[i];
                             if (enemy.x == x && enemy.y ==y){
                                 is_enemy = true;
+                                enemyData = enemy;
+                                break;
                             }
                         }
 
-                        if (this.tile_randomize || (this.next_turn && (move || highlight!=''))){
+                        if (this.tile_randomize || (this.next_turn && (move || highlight!='' || enemyHighlight)) ){
                             left =left+Math.floor(Math.random()*100)-50;
                             top = top+Math.floor(Math.random()*100)-50;
                             rot = Math.floor(Math.random()*90)-45;
                         }
 
-                        map.push({x:x,y:y,left:left, top:top, rand:tileRand, rot:rot, type:type, highlight:highlight, move:move, is_enemy:is_enemy});
+                        map.push({x:x,y:y,left:left, top:top, rand:tileRand, rot:rot, type:type, highlight:highlight, move:move, is_enemy:is_enemy, enemyData:enemyData});
 
                     }
                 }
@@ -144,6 +204,7 @@
 
             actions:{
                 move: actions.move,
+                addNewEnemy: actions.addNewEnemy,
             },
             getters: {
                 money: getters.money,

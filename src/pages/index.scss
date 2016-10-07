@@ -38,3 +38,42 @@
   justify-content: center;
   z-index: 100;
 }
+.margindown{
+  margin-bottom: -27px;
+}
+
+.credits{
+  width: 100vw;
+  height: 100vh;
+  color: #c3dc00;
+
+  //font-family: sans-serif;
+  //font-size: 1.4em;
+  a{
+    color: #170450;
+    text-decoration: none;
+    &:hover{
+      color: #0dfdff;
+    }
+  }
+
+  h1{
+    margin-left: 40px;
+    margin-bottom: 0;
+  }
+  .sounds{
+    position: absolute;
+    left:0;
+    top:0;
+    width: 50vw;
+    height: 100vh;
+  }
+  .music{
+    position: absolute;
+    left:50vw;
+    top:0;
+    width: 50vw;
+    height: 100vh;
+  }
+
+}

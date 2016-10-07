@@ -8,6 +8,13 @@
                             <template v-for="tent in tent_row">
                                 <div v-if="tent.type != undefined" class="tent" transition="opacity"  @click="selectTentToManage(tent.tent_x, tent.tent_y)">
                                     <div class="image" :class="['lvl'+tent.level]">
+                                        <div class="health">
+                                            <div class="heart" :style="{width:((tent.health/tent.maxHealth) * 40)+'px'}"></div>
+                                            <div class="text">{{ tent.health }}</div>
+                                        </div>
+
+                                        <div class="unit_image" :class="[tent.type]"></div>
+
                                         <div class="text">{{ tent.name }}</div>
                                     </div>
                                 </div>
@@ -121,7 +128,7 @@
                 this.buildTentY=undefined;
                 this.autoSaveGame();
             },
-            updateTent: function (x,y,type,level, stats) {
+            updateTent: function (x,y,type,level, stats, heal) {
 
                 this.tents[x][y].level = level;
                 this.$set('tents['+x+']['+y+'].level', this.tents[x][y].level);
@@ -130,7 +137,9 @@
                 this.tents[x][y].defence = stats.defence;
                 this.tents[x][y].speed = stats.speed;
                 this.tents[x][y].maxHealth = stats.hp;
-                this.tents[x][y].health = stats.hp;
+                if (heal) {
+                    this.tents[x][y].health = stats.hp;
+                }
                 this.tents[x][y].maxAp = stats.ap;
                 this.tents[x][y].ap = stats.ap;
 
@@ -158,7 +167,6 @@
                         }
                     }
                 }
-                console.log(own);
 
                 this.saveGame(own, []);
             }

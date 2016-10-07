@@ -1,13 +1,15 @@
 export var map = [
-    ['grass', 'mud'  , 'mud'  , 'mud'  , 'grass', 'grass', 'mud'  , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['mud'  , 'mud'  , 'water', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['mud'  , 'water', 'water', 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'mud'  , 'lava' , 'lava' , 'lava' , 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'mud'  , 'lava' , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'mud'  , 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
-    ['water', 'water', 'grass', 'mud'  , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass',  ],
+    ['grass', 'mud'  , 'mud'  , 'mud'  , 'grass', 'grass', 'mud'  , 'grass', 'grass', 'grass', 'grass', 'water', 'water', 'water', 'water',  ],
+    ['mud'  , 'mud'  , 'water', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'water', 'grass',  ],
+    ['mud'  , 'water', 'water', 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'mud'  , 'lava' , 'lava' , 'lava' , 'lava' , 'grass', 'grass', 'grass', 'lava' , 'lava' , 'lava',  'grass', 'grass',  ],
+    ['water', 'water', 'mud'  , 'lava' , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'lava' , 'lava',  'grass', 'grass',  ],
+    ['water', 'water', 'mud'  , 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'lava' , 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'mud'  , 'grass', 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'mud'  , 'mud'  , 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'grass', 'mud'  , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'mud'  , 'mud'  , 'mud'  , 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'water', 'water', 'grass', 'grass', 'water', 'grass', 'grass', 'grass', 'grass', 'mud'  , 'grass', 'grass', 'grass',  ],
+    ['water', 'water', 'grass', 'mud'  , 'lava' , 'grass', 'lava' , 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass',  ],
 ];
 
 const state = {
@@ -44,6 +46,11 @@ const mutations = {
             }
         }
         state.enemy = enemys;
+    },
+    ADD_ENEMY: function (state, x, y, level, money) {
+        state.enemy.push({
+            x,y,level,money
+        })
     },
     LOAD_GAME: function (state, x,y,money, enemys) {
         state.enemy = enemys;

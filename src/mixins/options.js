@@ -5,5 +5,5 @@ export default {
         showOptions: function () {
             this.isOptionsShow = !this.isOptionsShow;
         },
-    }
+    },
 }

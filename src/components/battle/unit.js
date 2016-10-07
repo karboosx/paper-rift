@@ -174,6 +174,12 @@ export default function Unit() {
         return this;
     }
 
+    this.setHealth = function (health) {
+        this.health = health;
+
+        return this;
+    }
+
     this.setType = function (type) {
         this.type = type;
         this.setAttributes();

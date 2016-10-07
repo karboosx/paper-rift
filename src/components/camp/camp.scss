@@ -33,6 +33,7 @@
   height: 200px;
 
   .image{
+    position: absolute;
     width: 200px;
     height: 200px;
     display: flex;
@@ -145,16 +146,17 @@ $battle_belt_height: 200px;
 
 .map_button{
   background-image: url("../../assets/images/gui/map.png");
-  width:198px;
-  height:110px;
+  width:129px;
+  height:75px;
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  left: 10px;
   transition: 0.1s all ease-out;
+  background-size: contain;
 
 
   &:hover{
-    background: url("../../assets/images/gui/map_hover.png");
+    background-image: url("../../assets/images/gui/map_hover.png");
     cursor: url("../../assets/images/gui/cursor_pointer.png"), auto;
   }
 }
@@ -180,4 +182,82 @@ $battle_belt_height: 200px;
   animation-duration: 80s;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
+}
+
+
+.health{
+  position: absolute;
+  background: url("../../assets/images/gui/heart_bg.png");
+  width: 40px;
+  height: 37px;
+  display: flex;
+  opacity: 0;
+  justify-content: flex-end;
+  z-index: 10000;
+  transition: 0.2s opacity ease-in;
+  left:10px;
+  top:10px;
+
+  .heart{
+    background: url("../../assets/images/gui/heart.png");
+    width: 40px;
+    height: 37px;
+    position: absolute;
+    left: 0;
+  }
+
+  .text{
+    width: 40px;
+    height: 37px;
+    position: absolute;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+  }
+}
+
+.unit_image{
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  opacity: 0;
+  justify-content: flex-end;
+  z-index: 10000;
+  transition: 0.1s all ease-in;
+  right:10px;
+  top:-10px;
+  transform: rotate(-20deg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  &.cavalry{
+    background-image: url("../../assets/images/units/single/cavalry.png");
+  }
+  &.king{
+    background-image: url("../../assets/images/units/single/king.png");
+  }
+  &.axemen{
+    background-image: url("../../assets/images/units/single/axemen.png");
+  }
+  &.swordman{
+    background-image: url("../../assets/images/units/single/swordman.png");
+  }
+  &.archer{
+    background-image: url("../../assets/images/units/single/archer.png");
+  }
+}
+
+.tent:hover{
+  .health{
+    opacity: 1;
+  }
+  .unit_image{
+    opacity: 1;
+    transform: rotate(20deg);
+    right:-40px;
+    top:20px;
+  }
 }

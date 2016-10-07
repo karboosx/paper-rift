@@ -8,6 +8,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(53, 27, 4, 0.54);
+  z-index: 100000;
 }
 
 .actions{
@@ -33,6 +34,13 @@
   .information{
     width: 30%;
     height: 37px;
+    &.big{
+      width: 100%;
+    }
+
+    &.medium{
+      width: 50%;
+    }
   }
 }
 
@@ -154,6 +162,40 @@
         color: #ff292f;
       }
     }
+  }
+
+  .heal{
+    position: absolute;
+    width: 100px;
+    height: 86px;
+    left: 381px;
+    top: 340px;
+    color: white;
+    text-align: center;
+
+    .heal_button{
+      position: relative;
+      background: url("../../assets/images/gui/heart_bg.png") no-repeat;
+      width: 40px;
+      height: 37px;
+      left: 30px;
+      top: 5px;
+    }
+
+    &:hover{
+      .heal_button {
+        background: url("../../assets/images/gui/heart.png") no-repeat;
+      }
+    }
+
+    &.clicked{
+      color: #ff2b54;
+      .heal_button {
+        position: relative;
+        background: url("../../assets/images/gui/heart.png") no-repeat;
+      }
+    }
+
   }
 }
 
@@ -322,6 +364,7 @@
       &.big{
         width: 100%;
       }
+
       &.medium{
         width: 50%;
       }

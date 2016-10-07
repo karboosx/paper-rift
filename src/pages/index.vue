@@ -1,9 +1,10 @@
 <template>
     <div class="page">
         <div class="menu" id="menu">
-            <div v-if="haveGame" v-link="{name:'camp'}" class="gui basic two hover center">Continue Game</div>
-            <div @click="newGame" class="gui basic two hover center">Start New Game</div>
-            <div class="gui basic two hover center" @click="showOptions">Options</div>
+            <div v-if="haveGame" v-link="{name:'camp'}" class="gui basic two hover center margindown">Continue Game</div>
+            <div @click="newGame" class="gui basic two hover center margindown">Start New Game</div>
+            <div class="gui basic two hover center margindown" @click="showOptions">Options</div>
+            <div class="gui basic two hover center margindown" v-link="{name:'credits'}">Credits</div>
         </div>
         <div class="heroes" id="heroes"></div>
         <div class="logo" id="logo"></div>
@@ -61,4 +62,4 @@
     }
 </script>
 
-<style lang="scss" src="./index.scss"></style>
+<style scoped lang="scss" src="./index.scss"></style>

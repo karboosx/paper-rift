@@ -1,6 +1,7 @@
 import Index from './pages/index.vue'
 import Battle from './pages/battle.vue'
 import Camp from './pages/camp.vue'
+import Credits from './pages/credits.vue'
 
 var routes = {
     '/': {
@@ -17,6 +18,11 @@ var routes = {
         name: 'battle',
         component: Battle,
         music:'battle'
+    },
+    '/credits': {
+        name: 'credits',
+        component: Credits,
+        music:'menu'
     },
 };
 

@@ -77,8 +77,8 @@
 
         for (var i = 0; i < own.length; i++) {
             var unit = own[i];
-            console.log(unit.tent_x,unit.tent_y,Math.floor(unit.tent_x/2), unit.tent_y+(unit.tent_x%2)*4);
             unit.setPos(Math.floor(unit.tent_x/2), unit.tent_y+(unit.tent_x%2)*4);
+            unit.ap = unit.maxAp;
         }
         return own;
     }

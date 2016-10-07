@@ -46,6 +46,10 @@ var actions = {
         return game;
 
     },
+    addNewEnemy: function ({dispatch}, x, y, level, money) {
+        dispatch(mutations.CAMPAIGN_ADD_ENEMY, x, y, level, money)
+
+    },
 
 
 }

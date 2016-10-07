@@ -45,9 +45,9 @@
                             <div class="icon small arrow"></div>
                             {{ stats.ap }}
                         </div>
-                        <div class="information center">
+                        <div class="information medium center">
                             <div class="icon small heart"></div>
-                            {{ stats.hp }}
+                            {{ stats.hpNow }}/{{ stats.hp }}
                         </div>
                     </div>
                 </div>
@@ -69,6 +69,10 @@
             </div>
             <button class="ok" @click="saveAction" :disabled="money < cost">
             </button>
+            <div class="heal" v-if="tent.health<stats.hp" :class="{clicked:heal}" @click="toogleHeal">
+                <div class="text">Heal Unit</div>
+                <div class="heal_button"></div>
+            </div>
 
         </div>
         <purse></purse>
@@ -93,6 +97,7 @@
                 units_data: units,
                 name:this.tent.name.slice(),
                 conveniences:conveniences,
+                heal:false,
                 conveniencesNames:conveniencesNames,
                 levels:[
                     {
@@ -116,6 +121,9 @@
         },
         components:{Purse},
         methods:{
+            toogleHeal: function () {
+                this.heal = !this.heal;
+            },
             selectType: function (unit_type) {
 
                 SoundManager.playSound('click');
@@ -136,7 +144,7 @@
                 this.tent.name = this.name;
                 if (this.money >= this.cost && this.cost > 0) {
                     this.money_dec(this.cost);
-                    this.$parent.updateTent(this.tent.tent_x,this.tent.tent_y,this.type,this.newLevel, this.stats);
+                    this.$parent.updateTent(this.tent.tent_x,this.tent.tent_y,this.type,this.newLevel, this.stats, this.heal);
                 }
                 this.cancelAction();
             },
@@ -154,14 +162,15 @@
                 var upgrade = 0.2;
                 var mult = (this.newLevel-this.actualLevel)*upgrade;
 
-                return {
+                var stats = {
                     attack:this.tent.attack+Math.round(this.tent.attack*mult),
                     defence:this.tent.defence+Math.ceil(this.tent.defence*mult),
                     speed:this.tent.speed+Math.round(this.tent.speed*mult),
                     hp:this.tent.maxHealth+Math.ceil(this.tent.maxHealth*mult),
                     ap:this.tent.maxAp+Math.floor(this.tent.maxAp*mult),
                 };
-
+                stats.hpNow = (!this.heal ? this.tent.health: stats.hp);
+                return stats;
             },
             type: function () {
                 return this.tent.type;
@@ -171,9 +180,18 @@
                 return Math.round(Math.round(unit.hp+(unit.attack+unit.defence+unit.speed/10)*unit.ap)/5)*5;
             },
             cost: function () {
+                var hp =(this.stats.hp);
+                var cost = 0;
                 if (this.actualLevel != this.newLevel)
-                return ((this.newLevel - this.actualLevel) * this.newLevel)*this.costUnit;
-                else return 0;
+                    cost+= ((this.newLevel - this.actualLevel) * this.newLevel)*this.costUnit;
+
+
+                if (this.heal && this.tent.health<this.stats.hp)
+                    cost+=Math.ceil((this.stats.hp-this.tent.health)*
+                            (this.newLevel)*0.2);
+
+
+                return cost;
             }
         },
         vuex:{

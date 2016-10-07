@@ -372,6 +372,7 @@
                             unit.showArrow = false;
                             unit.moving = false;
                             callback(unit, this);
+                            if (attacker.health<=0 || defender.health<=0)that.calculateMap();
                         }
                     }, 5);
                 }else {
@@ -437,6 +438,7 @@
                             that.calculateMap();
 
                             callback(unit, this);
+                            if (attacker.health<=0 || defender.health<=0)that.calculateMap();
                         }
                     }, 5);
                 }
@@ -549,6 +551,7 @@
                         that.calculateMap();
 
                         callback(unit, this);
+
                     }
                 }, 5);
 
@@ -768,16 +771,17 @@
         },
         created: function () {
             var that = this;
-            Vue.nextTick(function () {
 
-                var body = $('body');
+            var body = $('body');
+
+            function initWindow(context) {
                 var width = body.width();
                 var height = body.height();
-                that.screenX = (width);
-                that.screenY = (height);
+                context.screenX = (width);
+                context.screenY = (height);
 
-                var leftMax = (that.x+1)*that.sizeX-width-50;
-                var topMax = (that.y+1)*that.sizeY-height-40;
+                var leftMax = (context.x+1)*context.sizeX-width-50;
+                var topMax = (context.y+1)*context.sizeY-height-40;
                 var topMin = 20;
 
                 if (leftMax<=0) leftMax = 0;
@@ -787,6 +791,18 @@
                 $('#map').draggable({
                     containment: [-leftMax ,-topMax, 0,topMin]
                 });
+                context.calculateMap();
+
+                context.calculateStats();
+            }
+
+            $(window).resize(function () {
+                initWindow(that);
+            })
+
+            Vue.nextTick(function () {
+
+                initWindow(that);
                 that.startIntro = true;
                 SoundManager.playSound('whoosh_start');
                 setTimeout(function () {

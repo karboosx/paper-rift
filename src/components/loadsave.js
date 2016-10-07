@@ -14,13 +14,17 @@ export default {
     createNewGame: function () {
         var newGame = {
             own: [
-                new Unit().setTentPos(1, 0).setType('king').setParty('player').setPos(8, 2).setLevel(5),
+                new Unit().setTentPos(1, 0).setType('king').setParty('player').setPos(8, 2).setLevel(1).setHealth(5),
             ],
             x: 4,
             y: 4,
-            money: 1000,
+            money: 10000,
             campaign_enemy:[
-                {x:4,y:3,level:2, money:20}
+                {x:4,y:3,level:2, money:20},
+                {x:10,y:2,level:3, money:40},
+                {x:8,y:8,level:2, money:30},
+                {x:2,y:5,level:2, money:30},
+                {x:12,y:8,level:2, money:30},
             ],
         };
 
