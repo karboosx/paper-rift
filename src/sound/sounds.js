@@ -87,6 +87,10 @@ var sounds = {
         src:[require('../assets/sounds/213980__fenrirfangs__coin-clatter-2.mp3')],
         volume:1
     },
+    empty_bottle: {
+        src:[require('../assets/sounds/263007__dermotte__empty-bottle.mp3')],
+        volume:1
+    },
 
 
 };

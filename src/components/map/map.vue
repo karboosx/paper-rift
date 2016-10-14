@@ -120,7 +120,7 @@
 
                     var ownLength = LoadSave.loadOwn().length;
                     var level = Math.floor(Math.random()*(ownLength+1))+1;
-                    var money = Math.floor(Math.random()*(level+1))*(level)*5+10;
+                    var money = (level)*(level)+Math.floor(Math.random()*(level+1))*5+10;
                     console.log(level, money);
 
                     return {

@@ -236,3 +236,23 @@
   }
 
 }
+
+.hide_battle_info{
+  position: fixed;
+  right: 10px;
+  bottom: 30px;
+  background: url("../../assets/images/gui/info.png");
+  width: 50px;
+  height: 46px;
+  z-index: 100000;
+  &:hover{
+    background: url("../../assets/images/gui/info_hover.png");
+  }
+
+  &.block{
+    background: url("../../assets/images/gui/info_block.png");
+    &:hover{
+      background: url("../../assets/images/gui/info_block_hover.png");
+    }
+  }
+}

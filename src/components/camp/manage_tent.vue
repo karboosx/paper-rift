@@ -69,7 +69,7 @@
             </div>
             <button class="ok" @click="saveAction" :disabled="money < cost">
             </button>
-            <div class="heal" v-if="tent.health<stats.hp" :class="{clicked:heal}" @click="toogleHeal">
+            <div class="heal" v-if="tent.health<stats.hp && this.actualLevel == this.newLevel" :class="{clicked:heal}" @click="toogleHeal">
                 <div class="text">Heal Unit</div>
                 <div class="heal_button"></div>
             </div>
@@ -123,6 +123,10 @@
         methods:{
             toogleHeal: function () {
                 this.heal = !this.heal;
+
+                if (this.heal){
+                    SoundManager.playSound('empty_bottle')
+                }
             },
             selectType: function (unit_type) {
 
@@ -169,7 +173,7 @@
                     hp:this.tent.maxHealth+Math.ceil(this.tent.maxHealth*mult),
                     ap:this.tent.maxAp+Math.floor(this.tent.maxAp*mult),
                 };
-                stats.hpNow = (!this.heal ? this.tent.health: stats.hp);
+                stats.hpNow = (!this.heal && this.actualLevel == this.newLevel ? this.tent.health: stats.hp);
                 return stats;
             },
             type: function () {
@@ -186,7 +190,7 @@
                     cost+= ((this.newLevel - this.actualLevel) * this.newLevel)*this.costUnit;
 
 
-                if (this.heal && this.tent.health<this.stats.hp)
+                else if (this.heal && this.tent.health<this.stats.hp)
                     cost+=Math.ceil((this.stats.hp-this.tent.health)*
                             (this.newLevel)*0.2);
 

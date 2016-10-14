@@ -306,5 +306,18 @@ body *{
   align-content: center;
   color: wheat;
   font-size: 3em;
-  display: none;
+}
+
+.back_to_menu{
+  width: 90px;
+  height: 48px;
+  z-index: 1000;
+  background: url("./assets/images/gui/menu_button.png") no-repeat;
+  position: fixed;
+  top:10px;
+  left: 10px;
+
+  &:hover{
+    background: url("./assets/images/gui/menu_button_hover.png") no-repeat;
+  }
 }

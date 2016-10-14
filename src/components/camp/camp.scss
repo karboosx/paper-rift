@@ -154,6 +154,8 @@ $battle_belt_height: 200px;
   transition: 0.1s all ease-out;
   background-size: contain;
 
+  z-index: 10001;
+
 
   &:hover{
     background-image: url("../../assets/images/gui/map_hover.png");
@@ -233,6 +235,7 @@ $battle_belt_height: 200px;
   transform: rotate(-20deg);
   background-size: contain;
   background-repeat: no-repeat;
+  pointer-events: none;
   &.cavalry{
     background-image: url("../../assets/images/units/single/cavalry.png");
   }

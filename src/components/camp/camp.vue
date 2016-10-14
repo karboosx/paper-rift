@@ -130,16 +130,17 @@
             },
             updateTent: function (x,y,type,level, stats, heal) {
 
-                this.tents[x][y].level = level;
+
                 this.$set('tents['+x+']['+y+'].level', this.tents[x][y].level);
 
                 this.tents[x][y].attack = stats.attack;
                 this.tents[x][y].defence = stats.defence;
                 this.tents[x][y].speed = stats.speed;
                 this.tents[x][y].maxHealth = stats.hp;
-                if (heal) {
+                if (heal || this.tents[x][y].level != level) {
                     this.tents[x][y].health = stats.hp;
                 }
+                this.tents[x][y].level = level;
                 this.tents[x][y].maxAp = stats.ap;
                 this.tents[x][y].ap = stats.ap;
 
