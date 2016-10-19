@@ -100,6 +100,7 @@ var loadedMusic = 0;
 var musicCount = 0;
 
 function checkIfLoaded(){
+    loading.loading('sound',loadedMusic,musicCount)
     if (musicCount == loadedMusic){
         loading.loaded('sound');
     }
@@ -107,6 +108,8 @@ function checkIfLoaded(){
 for (let soundName in sounds) {
     musicCount++;
 }
+
+loading.loading('sound',loadedMusic,musicCount)
 
 for (let soundName in sounds) {
     sounds[soundName].onload = function () {

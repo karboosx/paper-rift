@@ -1,5 +1,6 @@
 import Music from './music'
 import Sound from './sounds'
+//import Images from './images'
 
 
 export default {

@@ -27,7 +27,14 @@
                 continue;
             }
 
+            if (randX == 1) {
+                continue;
+            }
             if (randX == x-1) {
+                continue;
+            }
+
+            if (randX == x-2) {
                 continue;
             }
 
@@ -42,7 +49,14 @@
                     continue;
                 }
 
-                if (randX+randXplus == x-1) {
+                if (randX+randXplus == 1) {
+                    continue;
+                }
+                if (randX+randXplus == x-2) {
+                    continue;
+                }
+
+                if (randX+randXplus == x-2) {
                     continue;
                 }
                 obstacles.push({x:randX+randXplus,y:randY+randYplus,type:obstacleType});
@@ -61,11 +75,24 @@
         if (enemy == undefined){
             return undefined;
         }
-        var enemy_available = ['cavalry','swordman','archer','axemen'];
+        var enemy_available = [];
+        if (enemy.type == 'bandit') enemy_available = ['cavalry','swordman','archer','axemen'];
+        if (enemy.type == 'plague') enemy_available = ['plague'];
+
         var enemys = [];
+
+        if (enemy.level > y*2){
+            enemy.level = y*2;
+        }
+
         for (let i=0; i<enemy.level; i++){
+            let enemy_y = i%y;
+
+            let enemy_x = Math.floor(i/y);
+            enemy_x += 1;
+
             enemys.push(
-                    new Unit().setPos(x-1,i).setType(enemy_available[Math.floor(Math.random()*enemy_available.length)]).setParty('enemy').setMovable(false)
+                    new Unit().setPos(x-enemy_x,enemy_y).setType(enemy_available[Math.floor(Math.random()*enemy_available.length)]).setParty('enemy').setMovable(false)
             );
         }
         console.log(enemys);

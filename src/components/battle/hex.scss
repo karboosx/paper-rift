@@ -52,6 +52,10 @@
     }
   }
 
+  &.plague{
+    background-image: url("../../assets/images/units/plague.png");
+  }
+
   &.rock{
     background-image: url("../../assets/images/units/rock.png");
     width: 120px;

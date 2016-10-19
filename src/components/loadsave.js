@@ -20,18 +20,18 @@ export default {
             y: 4,
             money: 100,
             campaign_enemy:[
-                {x:4,y:3,level:2, money:20},
-                {x:10,y:2,level:3, money:40},
-                {x:8,y:8,level:2, money:30},
-                {x:2,y:5,level:2, money:30},
-                {x:12,y:8,level:2, money:30},
+                {x:4,y:3,level:1, money:2000,type:'plague'},
             ],
+            events: [
+                {name: 'plague', turn_count: 81,show_in_list:true, list_name:'Great Monster Plague'}
+            ]
         };
 
         this.saveGame(newGame);
     },
     saveGame: function (game) {
         window.localStorage.setItem('game', this.makeJSON(game));
+        console.log(game);
     },
     loadGame: function () {
         this.preCheck();

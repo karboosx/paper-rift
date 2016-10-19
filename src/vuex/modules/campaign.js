@@ -20,6 +20,9 @@ const state = {
     enemy:[
         {x:4,y:3,level:2, money:20}
     ],
+    events: [
+        {name: 'plague', turn_count: 100}
+    ]
 }
 
 const mutations = {
@@ -47,17 +50,31 @@ const mutations = {
         }
         state.enemy = enemys;
     },
-    ADD_ENEMY: function (state, x, y, level, money) {
+    ADD_ENEMY: function (state, x, y, level, money,type) {
         state.enemy.push({
-            x,y,level,money
+            x,y,level,money,type
         })
     },
-    LOAD_GAME: function (state, x,y,money, enemys) {
+    LOAD_GAME: function (state, x,y,money, enemys, events) {
         state.enemy = enemys;
         state.x = x;
         state.y = y;
         state.money = money;
+        state.events = events;
     },
+    TICK_EVENT: function (state, event_id) {
+        state.events[event_id].turn_count--;
+    },
+    DELETE_EVENT: function (state, event_id) {
+        var events = [];
+        for (var i = 0; i < state.events.length; i++) {
+            var event = state.events[i];
+
+            if (i != event_id) events.push(event);
+        }
+        state.events = events;
+    },
+
 }
 
 export default {

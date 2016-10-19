@@ -36,6 +36,7 @@
             <div :class="{active:selected}" class="unit king" v-if="unit.type == 'king'"></div>
             <div :class="{active:selected}" class="unit swordman" v-if="unit.type == 'swordman'"></div>
             <div :class="{active:selected}" class="unit archer" v-if="unit.type == 'archer'"></div>
+            <div :class="{active:selected}" class="unit plague" v-if="unit.type == 'plague'"></div>
 
             <div class="unit rock" v-if="unit.type == 'rock'"></div>
             <div class="unit forest" v-if="unit.type == 'forest'"></div>

@@ -456,11 +456,14 @@
             gainPrice: function (amount) {
                 var that = this;
 
+                var amount_to_inc = Math.floor(amount/10);
+                if (amount_to_inc<1) amount_to_inc = 1;
+
                 if (amount>0){
-                    this.money_inc(1);
+                    this.money_inc(amount_to_inc);
                     setTimeout(function () {
                         if (amount>0) {
-                            that.gainPrice(amount - 1);
+                            that.gainPrice(amount - amount_to_inc);
                             if (Math.random()*100 <35)
                                 SoundManager.playSound('gain_money')
                         }
@@ -715,6 +718,7 @@
                     SoundManager.playSound('win')
                     setTimeout(function () {
                         that.gainPrice(that.win_price);
+                        SoundManager.playSound('gain_money')
                     }, 500);
 
                 }, 500);

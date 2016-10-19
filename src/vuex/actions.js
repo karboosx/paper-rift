@@ -36,19 +36,28 @@ var actions = {
             y: state.Campaign.y,
             money: state.Campaign.money,
             campaign_enemy: state.Campaign.enemy,
+            events: state.Campaign.events,
         };
 
         LoadSave.saveGame(game);
     },
     loadGame: function ({dispatch}) {
         var game = LoadSave.loadGame();
-        dispatch(mutations.LOAD_GAME, game.x, game.y, game.money, game.campaign_enemy)
+        dispatch(mutations.LOAD_GAME, game.x, game.y, game.money, game.campaign_enemy, game.events)
         return game;
 
     },
-    addNewEnemy: function ({dispatch}, x, y, level, money) {
-        dispatch(mutations.CAMPAIGN_ADD_ENEMY, x, y, level, money)
+    addNewEnemy: function ({dispatch}, x, y, level, money, type) {
+        if (type == undefined) type = 'bandit';
+        dispatch(mutations.CAMPAIGN_ADD_ENEMY, x, y, level, money, type)
 
+    },
+    tickEvent: function ({dispatch}, event_id) {
+        dispatch(mutations.TICK_EVENT, event_id)
+
+    },
+    deleteEvent: function ({dispatch}, event_id) {
+        dispatch(mutations.DELETE_EVENT, event_id)
     },
 
 

@@ -167,6 +167,10 @@
     }
     &.enemy{
       background-image: url("../../assets/images/units/single/axemen.png");
+
+      &.plague{
+        background-image: url("../../assets/images/units/single/plague.png");
+      }
     }
   }
 
@@ -178,6 +182,60 @@ body{
       .text{
         opacity: 1;
       }
+    }
+  }
+}
+
+.showInfo{
+  position: fixed;
+  top:calc(50vh - 100px);
+  background: #0c84e4;
+  color: wheat;
+  height: 200px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s all ease-in;
+
+  .text{
+    font-size: 4em;
+  }
+}
+
+.events{
+  position: fixed;
+  bottom:8px;
+  right: 8px;
+  color: wheat;
+  transition: 0.2s all ease-in-out;
+  opacity: 1;
+  text-align: center;
+
+  .title{
+    font-size: 2em;
+  }
+
+  &:hover{
+    opacity: 0;
+  }
+  .event{
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.46);
+    transform: skewX(-14deg) rotate(3deg);
+    border-radius: 2px;
+    display: flex;
+    background: #0e6f5c;
+    padding: 4px;
+    justify-content: space-between;
+    .name{
+      font-size: 1.2em;
+      line-height: 1em;
+    }
+    .time{
+      font-size: 1.4em;
+      line-height: 1em;
+      color: #5ed5ff;
+      margin-left: 1em;
     }
   }
 }

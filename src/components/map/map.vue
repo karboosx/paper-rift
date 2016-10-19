@@ -13,12 +13,21 @@
                         </div>
 
                         <div class="hero player" v-if="tile.x == campaign_x && tile.y == campaign_y"></div>
-                        <div class="hero enemy" v-if="tile.is_enemy"></div>
+                        <div class="hero enemy" :class="[tile.enemyData.type]" v-if="tile.is_enemy"></div>
                     </div>
                 </template>
             </div>
         </div>
-
+        <div v-if="toggleShowInfo" class="showInfo" transition="opacity">
+            <div class="text">{{showInfoText}}</div>
+        </div>
+        <div v-if="haveEventsToShow" class="events">
+            <div class="title">Upcoming events</div>
+            <div class="event" v-for="event in events" v-if="event.turn_count>0 && event.show_in_list">
+                <div class="name">{{ event.list_name }}</div>
+                <div class="time">{{ event.turn_count }} Turn</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -28,6 +37,7 @@
     import SoundManager from '../../sound/manager'
     import Vue from 'vue'
     import LoadSave from '../loadsave'
+    import Events from '../events'
 
     export default {
         props:['nextturn'],
@@ -42,8 +52,15 @@
                 next_turn:false,
                 markToMoveX:undefined,
                 markToMoveY:undefined,
-                markEnemyHighlightX:undefined,
-                markEnemyHighlightY:undefined,
+                markEnemyHighlightArray:[],
+
+//                OLD
+//                markEnemyHighlightX:undefined,
+//                markEnemyHighlightY:undefined,
+
+                toggleShowInfo: false,
+                showInfoText: '',
+
                 tiles:{
                     grass:{
                         name:'Grass',
@@ -57,17 +74,21 @@
                     water:{
                         name:'Water',
                     },
-                }
+                },
 
             }
         },
         methods:{
+            //-------------------------------------
+            //              Next Turn
+            //-------------------------------------
             moveToTile: function (tile) {
                 if (tile.type == 'water' || !tile.move || this.tile_randomize || this.next_turn || this.enemyReady) return;
                 var that = this;
                 SoundManager.playSound('paper_crumpled');
 
                 var newEnemy = that.generateEnemys();
+                that.tickEvents();
                 if (newEnemy != undefined){
                     this.markEnemyHighlight(newEnemy.x,newEnemy.y);
                 }
@@ -93,17 +114,78 @@
                 this.markToMoveY = y;
             },
             markEnemyHighlight: function (x,y) {
-                this.markEnemyHighlightX = x;
-                this.markEnemyHighlightY = y;
+                this.markEnemyHighlightArray.push({x:x,y:y});
+
+//                OLD
+//                this.markEnemyHighlightX = x;
+//                this.markEnemyHighlightY = y;
             },
             clearEnemyHighlight: function () {
-                this.markEnemyHighlightX = undefined;
-                this.markEnemyHighlightY = undefined;
+                this.markEnemyHighlightArray = [];
+
+//                OLD
+//                this.markEnemyHighlightX = undefined;
+//                this.markEnemyHighlightY = undefined;
+            },
+            tickEvents: function () {
+                for (let event_id = 0; event_id < this.events.length; event_id++) {
+                    var event = this.events[event_id];
+
+                    this.tickEvent(event_id);
+
+                    if (event.turn_count == 0) Events.start(event.name, this, event_id);
+                    if (event.turn_count < 0) Events.tick(event.name, this, event_id);
+                }
+
+            },
+            showInfo : function (text, duration) {
+                if (duration == undefined) duration = 2000;
+                this.showInfoText = text;
+                this.toggleShowInfo = true;
+                var that = this;
+                setTimeout(function () {
+                    that.toggleShowInfo = false;
+                    that.showInfoText = '';
+                },duration);
+
+                SoundManager.playSound('horn');
+            },
+            freeSpace: function () {
+                var notFound = true;
+                var iteration = 50;
+                while (notFound && iteration>0){
+                    notFound = false;//zakladam ze znalazłem
+
+                    var rand_X = Math.floor(Math.random()*(this.map_x+1));
+                    var rand_Y = Math.floor(Math.random()*(this.map_y+1));
+
+                    for (var i = 0; i < this.enemy_list.length; i++) {
+                        var enemy = this.enemy_list[i];
+                        if (enemy.x == rand_X && enemy.y == rand_Y){
+                            notFound = true;//jednak zajęte
+                        }
+                    }
+
+                    if (this.campaign_map[rand_Y][rand_X] == 'water'){
+                        notFound = true;//jednak zajęte
+                    }
+                    iteration--;
+                }
+
+                if (notFound)
+                    return false;
+                else
+                    return {x:rand_X,y:rand_Y};
+
             },
             generateEnemys: function () {
                 var rand = Math.floor(Math.random()*100);
 
-                if (rand < 30){
+                if (this.enemy_list.length == 0){
+                    rand =-1;
+                }
+
+                if (rand < 50){
                     var rand_X = Math.floor(Math.random()*(this.map_x+1));
                     var rand_Y = Math.floor(Math.random()*(this.map_y+1));
 
@@ -120,8 +202,7 @@
 
                     var ownLength = LoadSave.loadOwn().length;
                     var level = Math.floor(Math.random()*(ownLength+1))+1;
-                    var money = (level)*(level)+Math.floor(Math.random()*(level+1))*5+10;
-                    console.log(level, money);
+                    var money = (level)*(level)+(level)*Math.floor(Math.random()*3+1)+Math.floor(Math.random()*(level+1))*5+10;
 
                     return {
                         x:rand_X,
@@ -138,6 +219,16 @@
             }
         },
         computed: {
+            haveEventsToShow: function () {
+
+                for (var i = 0; i < this.events.length; i++) {
+                    var event = this.events[i];
+                    if (event.show_in_list && event.turn_count>0)
+                    return true;
+                }
+
+                return false;
+            },
             width_map: function () {
                 return this.map_x*this.tile_width;
             },
@@ -170,7 +261,15 @@
 //                        let tileRand = 1;
                         let type = this.campaign_map[y][x];
                         let highlight = (x == this.campaign_x && y == this.campaign_y) ? 'highlight' : '';
-                        let enemyHighlight = (x == this.markEnemyHighlightX && y == this.markEnemyHighlightY);
+
+
+                        let enemyHighlight = false;
+
+                        for (var enemyHL_i = 0; enemyHL_i < this.markEnemyHighlightArray.length; enemyHL_i++) {
+                            var enemyHighlightObj = this.markEnemyHighlightArray[enemyHL_i];
+
+                            if (x == enemyHighlightObj.x && y == enemyHighlightObj.y) enemyHighlight = true;
+                        }
 
                         let move = (!this.enemyReady && type != 'water' && Math.abs(x-this.campaign_x)<=1 && Math.abs(y-this.campaign_y)<=1 && !(x == this.campaign_x && y == this.campaign_y));
                         move = move || (!this.enemyReady && type != 'water' && Math.abs(x-this.markToMoveX)<=1 && Math.abs(y-this.markToMoveY)<=1);
@@ -205,11 +304,14 @@
             actions:{
                 move: actions.move,
                 addNewEnemy: actions.addNewEnemy,
+                tickEvent: actions.tickEvent,
+                deleteEvent: actions.deleteEvent,
             },
             getters: {
                 money: getters.money,
                 campaign_map: getters.map,
                 enemy_list: getters.enemy_list,
+                events: getters.events,
                 map_x: getters.map_x,
                 map_y: getters.map_y,
                 campaign_x: getters.campaign_x,

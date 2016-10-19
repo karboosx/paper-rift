@@ -23,6 +23,7 @@ var loadedMusic = 0;
 var musicCount = 0;
 
 function checkIfLoaded(){
+    loading.loading('music',loadedMusic,musicCount)
     if (musicCount == loadedMusic){
         loading.loaded('music');
     }
@@ -31,6 +32,8 @@ function checkIfLoaded(){
 for (let musicName in musics) {
     musicCount++;
 }
+
+loading.loading('music',loadedMusic,musicCount)
 
 for (let musicName in musics) {
 

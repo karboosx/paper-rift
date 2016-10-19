@@ -52,6 +52,16 @@ export var units = {
         range: 5,
         name: 'Archers'
     },
+    plague: {
+        hp: 50,
+        attack: 5,
+        defence: 10,
+        speed: 0,
+        ap: 2,
+        range_attack: false,
+        range: 0,
+        name: 'Plague Unit'
+    },
 }
 
 export var conveniences = {
