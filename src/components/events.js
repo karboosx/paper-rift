@@ -4,12 +4,12 @@ var events = {
             var freeSpace = context.freeSpace();
 
             if (typeof freeSpace == 'object') {
-                var level = Math.floor(Math.random() * 10) + 5;
+                var level = Math.floor(Math.random() * 4) + 1;
                 var newEnemy = {
                     x: freeSpace.x,
                     y: freeSpace.y,
                     level: level,
-                    money: level * 100,
+                    money: level * 200,
                     type: 'plague'
                 };
                 context.addNewEnemy(newEnemy.x, newEnemy.y, newEnemy.level, newEnemy.money, newEnemy.type);
@@ -22,7 +22,7 @@ var events = {
             this.makePlague(context);
         },
         tick: function (context, event_id) {
-            if (context.events[event_id].turn_count <= -20){
+            if (context.events[event_id].turn_count <= -10){
                 context.showInfo('Plague has ended!',5000);
                 context.deleteEvent(event_id);
             }else {

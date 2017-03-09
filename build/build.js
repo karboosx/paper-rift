@@ -23,7 +23,7 @@ mkdir('-p', assetsPath)
 cp('-R', 'static/', config.build.assetsRoot)
 
 webpack(webpackConfig, function (err, stats) {
-  spinner.stop()
+
   if (err) throw err
   process.stdout.write(stats.toString({
     colors: true,
@@ -31,5 +31,10 @@ webpack(webpackConfig, function (err, stats) {
     children: false,
     chunks: false,
     chunkModules: false
-  }) + '\n')
+  }) + '\n');
+
+  cp('-R', 'img/', path.join(config.build.assetsRoot, '/img'))
+  rm('-rf',  'img/')
+
+  spinner.stop()
 })

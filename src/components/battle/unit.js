@@ -44,17 +44,17 @@ export var units = {
     },
     archer: {
         hp: 15,
-        attack: 4,
+        attack: 5,
         defence: 0,
         speed: 10,
         ap: 1,
         range_attack: true,
-        range: 5,
+        range: 6,
         name: 'Archers'
     },
     plague: {
-        hp: 50,
-        attack: 5,
+        hp: 30,
+        attack: 8,
         defence: 10,
         speed: 0,
         ap: 2,

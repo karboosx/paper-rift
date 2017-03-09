@@ -1,5 +1,5 @@
 <template>
-    <div class="map_container" :class="{full : tile_randomize || next_turn}">
+    <div class="map_container" :class="{full : tile_randomize || next_turn}" @mousemove="moveCursor">
         <div class="campaign_map" :style="{width:width_map+'px',height:height_map+'px'}">
             <div class="inner">
                 <template v-for="tile in map" track-by="$index">
@@ -21,7 +21,7 @@
         <div v-if="toggleShowInfo" class="showInfo" transition="opacity">
             <div class="text">{{showInfoText}}</div>
         </div>
-        <div v-if="haveEventsToShow" class="events">
+        <div v-if="haveEventsToShow && !cursor_on_left" class="events" id="eventsInfo">
             <div class="title">Upcoming events</div>
             <div class="event" v-for="event in events" v-if="event.turn_count>0 && event.show_in_list">
                 <div class="name">{{ event.list_name }}</div>
@@ -38,6 +38,7 @@
     import Vue from 'vue'
     import LoadSave from '../loadsave'
     import Events from '../events'
+    import $ from 'jquery'
 
     export default {
         props:['nextturn'],
@@ -60,6 +61,13 @@
 
                 toggleShowInfo: false,
                 showInfoText: '',
+
+                screenX:100,
+                screenY:100,
+                cursorX:100,
+                cursorY:100,
+                eventsInfoWidth:0,
+                eventsInfoHeight:0,
 
                 tiles:{
                     grass:{
@@ -137,6 +145,16 @@
                     if (event.turn_count < 0) Events.tick(event.name, this, event_id);
                 }
 
+                this.calculateEventsInfoSize();
+
+            },
+            calculateEventsInfoSize: function () {
+                var that = this;
+                Vue.nextTick(function () {
+                    var eventsInfo = $('#eventsInfo');
+                    that.eventsInfoWidth = eventsInfo.width();
+                    that.eventsInfoHeight = eventsInfo.height();
+                })
             },
             showInfo : function (text, duration) {
                 if (duration == undefined) duration = 2000;
@@ -202,7 +220,7 @@
 
                     var ownLength = LoadSave.loadOwn().length;
                     var level = Math.floor(Math.random()*(ownLength+1))+1;
-                    var money = (level)*(level)+(level)*Math.floor(Math.random()*3+1)+Math.floor(Math.random()*(level+1))*5+10;
+                    var money = Math.ceil((level)*(level)+(level)*(level/2)*Math.floor(Math.random()*3+1)+Math.floor(Math.random()*(level+1))*5+10);
 
                     return {
                         x:rand_X,
@@ -211,7 +229,12 @@
                         money:money
                     }
                 }
-            }
+            },
+
+            moveCursor: function (event) {
+                this.cursorX = event.pageX;
+                this.cursorY = event.pageY;
+            },
         },
         watch:{
             enemyReady: function (val) {
@@ -219,6 +242,12 @@
             }
         },
         computed: {
+            cursor_on_left: function () {
+                var width = this.eventsInfoWidth;
+                var height = this.eventsInfoHeight;
+
+                return (this.cursorX > this.screenX-width-100 && this.cursorY > this.screenY-height-100);
+            },
             haveEventsToShow: function () {
 
                 for (var i = 0; i < this.events.length; i++) {
@@ -320,9 +349,17 @@
         },
         created: function () {
             var that = this;
+            var body = $('body');
+
+            var width = body.width();
+            var height = body.height();
+
+            this.screenX = (width);
+            this.screenY = (height);
 
             setTimeout(function () {
                 that.tile_randomize = false;
+                that.calculateEventsInfoSize();
             }, 10);
         }
     }

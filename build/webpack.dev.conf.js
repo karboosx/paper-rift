@@ -9,9 +9,21 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
+var loaders = utils.styleLoaders();
+loaders.push(
+    {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'file',
+        query: {
+            limit: 10000,
+            name: utils.assetsPath('img/[name].[hash:7].[ext]')
+        }
+    }
+);
+
 module.exports = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders()
+    loaders: loaders
   },
   // eval-source-map is faster for development
   devtool: '#eval-source-map',

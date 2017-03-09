@@ -20,10 +20,10 @@ export default {
             y: 4,
             money: 100,
             campaign_enemy:[
-                {x:4,y:3,level:1, money:2000,type:'plague'},
+                //{x:4,y:3,level:1, money:2000,type:'plague'},
             ],
             events: [
-                {name: 'plague', turn_count: 81,show_in_list:true, list_name:'Great Monster Plague'}
+                {name: 'plague', turn_count: 120,show_in_list:true, list_name:'Great Monster Plague'}
             ]
         };
 

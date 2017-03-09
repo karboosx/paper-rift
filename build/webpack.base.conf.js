@@ -45,14 +45,6 @@ module.exports = {
         loader: 'vue-html'
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'file',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
-        }
-      },
-      {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url',
         query: {
@@ -64,7 +56,7 @@ module.exports = {
           test: /\.(mp3|ogg)(\?.*)?$/,
           loader: 'file',
           query: {
-              name: utils.assetsPath('sound/[name].[hash:7].[ext]')
+              name: utils.assetsPath('sound/[name].[ext]')
           }
       },
     ]

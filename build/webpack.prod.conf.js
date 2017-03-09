@@ -6,9 +6,21 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
+var loaders = utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true });
+loaders.push(
+    {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'file',
+        query: {
+            limit: 10000,
+            name: utils.assetsPath('../img/[name].[hash:7].[ext]')
+        }
+    }
+);
+
 module.exports = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
+      loaders: loaders,
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
